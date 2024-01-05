@@ -20,6 +20,7 @@ class StackedSprite(pg.sprite.Sprite):
         self.viewing_angle = app.cache.viewing_angle
         self.rotated_sprites = self.cache[name]['rotated_sprites']
         self.collision_masks = self.cache[name]['collision_masks']
+        self.nolayerswitch = self.cache[name]['nolayerswitch']
 
         self.angle = 0
         self.screen_pos = vec2(0)
@@ -30,6 +31,7 @@ class StackedSprite(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
 
     def change_layer(self):
+        print("changing layer to ", self.name, self.screen_pos.y)
         self.group.change_layer(self, self.screen_pos.y)
 
     def transform(self):
@@ -45,7 +47,9 @@ class StackedSprite(pg.sprite.Sprite):
         self.transform()
         self.get_angle()
         self.get_image()
-        self.change_layer()
+        if not self.nolayerswitch:
+            #print(self.name, self.y_offset)
+            self.change_layer()
 
     def get_image(self):
         self.image = self.rotated_sprites[self.angle]

@@ -7,7 +7,7 @@ K = 'kitty'  # entity
 A, B, C, D, E, F, G, H = 'van', 'tank', 'blue_tree', 'car', 'grass', 'crate', 'cup', 'pancake'
 S = 'sphere' # transform object
 
-MAP = [
+SCENE = [
     [0, E, 0, E, B, 0, E, 0, 0, E, 0, E, 0, E],
     [E, C, C, C, 0, C, C, 0, E, 0, C, C, C, 0],
     [0, C, 0, 0, 0, 0, E, C, 0, C, 0, H, K, C],
@@ -19,9 +19,17 @@ MAP = [
     [E, 0, 0, C, C, C, C, 0, C, C, C, 0, E, 0],
 ]
 
+# this hacky janky and slow as fuck replace it
+MAP = open("pinehilldowntown_partial_parsed.csv").read().splitlines()
+MAP = [x[:-1].split(",") for x in MAP]
+for rowindex in range(len(MAP)):
+    for columnindex in range(len(MAP[rowindex])):
+        if MAP[rowindex][columnindex] == "-1":
+             MAP[rowindex][columnindex] = 0
+
 MAP_SIZE = MAP_WIDTH, MAP_HEIGHT = vec2(len(MAP), len(MAP[0]))
 MAP_CENTER = MAP_SIZE / 2
-
+print(MAP)
 
 class Scene:
     def __init__(self, app):
@@ -35,7 +43,8 @@ class Scene:
 
         for j, row in enumerate(MAP):
             for i, name in enumerate(row):
-                pos = vec2(i, j) + vec2(0.5)
+                pos = vec2(i, j)
+                # + vec2(0.5)
                 if name == 'player':
                     self.app.player.offset = pos * TILE_SIZE
                 elif name == 'kitty':
@@ -48,6 +57,9 @@ class Scene:
                 elif name == 'sphere':
                     obj = StackedSprite(self.app, name=name, pos=rand_pos(pos), rot=rand_rot())
                     self.transform_objects.append(obj)
+                elif name == "blacktop" or name=="gravel":
+                    print("placing", name, pos)
+                    StackedSprite(self.app, name=name, pos=pos, collision=False)
                 elif name:
                     StackedSprite(self.app, name=name, pos=rand_pos(pos), rot=rand_rot())
 

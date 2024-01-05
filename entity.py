@@ -16,6 +16,7 @@ class BaseEntity(pg.sprite.Sprite):
         self.mask = entity_cache[name]['mask']
         self.rect = self.image.get_rect()
         self.frame_index = 0
+        self.deferred_updates = 0
 
     def animate(self):
         if self.app.anim_trigger:

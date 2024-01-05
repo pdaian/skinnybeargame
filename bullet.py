@@ -7,6 +7,7 @@ class Explosion(Entity):
         self.life_time_cycles = self.attrs['num_layers'] - 1
         self.cycles = 0
         self.transform()
+        self.update()
 
     def update(self):
         super().update()

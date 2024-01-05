@@ -3,15 +3,15 @@ import pygame as pg
 vec2 = pg.math.Vector2
 
 RES = WIDTH, HEIGHT = vec2(1600, 900)
-RES = WIDTH, HEIGHT = vec2(1920, 1080)
+#RES = WIDTH, HEIGHT = vec2(1920, 1080)
 CENTER = H_WIDTH, H_HEIGHT = RES // 2
-TILE_SIZE = 250  #
+TILE_SIZE = 200  #
 
 PLAYER_SPEED = 0.4
-PLAYER_ROT_SPEED = 0.0015
+PLAYER_ROT_SPEED = 0.001
 
 BG_COLOR = 'olivedrab'  #
-NUM_ANGLES = 72  # multiple of 360 -> 24, 30, 36, 40, 45, 60, 72, 90, 120, 180
+NUM_ANGLES = 30  # multiple of 360 -> 24, 30, 36, 40, 45, 60, 72, 90, 120, 180
 
 # entity settings
 ENTITY_SPRITE_ATTRS = {
@@ -20,8 +20,8 @@ ENTITY_SPRITE_ATTRS = {
         'additional_states': { 'walking':  'assets/entities/level1/sb/sbwalk.png'},
         'mask_path': 'assets/entities/player/mask.png',
         'num_layers': 10,
-        'scale': 0.35,
-        'y_offset': 0,
+        'scale': 0.4,
+        'y_offset': 50,
         'reverse': True,
     },
     'kitty': {
@@ -34,7 +34,7 @@ ENTITY_SPRITE_ATTRS = {
         'num_layers': 10,
         'scale': .5,
         'path': 'assets/entities/level1/redexplosion1.png',
-        'y_offset': 50,
+        'y_offset': 50, 
         'reverse': True
     },
     'bullet': {
@@ -54,10 +54,26 @@ STACKED_SPRITE_ATTRS = {
     'sphere': {
         'path': 'assets/stacked_sprites/sphere.png',
         'num_layers': 13,
-        'scale': 10,
+        'scale': 6,
         'y_offset': 0,
         'mask_layer': 4,
     },
+    'blacktop': {
+        'num_layers': 1,
+        'scale': 6.1,
+        'path': 'assets/entities/level1/town/blacktop.png',
+        'y_offset': 0,
+        'outline': False,
+        'nolayerswitch': True
+   },
+   'gravel': {
+        'num_layers': 1,
+        'scale': 6.1,
+        'path': 'assets/entities/level1/town/gravel.png',
+        'y_offset': 0,
+        'outline': False,
+        'nolayerswitch': True,
+   },
     'pancake': {
         'path': 'assets/stacked_sprites/pancake.png',
         'num_layers': 11,
@@ -83,11 +99,13 @@ STACKED_SPRITE_ATTRS = {
         'scale': 7,
         'y_offset': 20,
         'outline': False,
+                'nolayerswitch': True
+
     },
     'blue_tree': {
         'path': 'assets/stacked_sprites/blue_tree.png',
         'num_layers': 43,
-        'scale': 8,
+        'scale': 10,
         'y_offset': -130,
         'transparency': True,
         'mask_layer': 3,
@@ -97,12 +115,14 @@ STACKED_SPRITE_ATTRS = {
         'num_layers': 9,
         'scale': 10,
         'y_offset': 10,
+
     },
     'van': {
         'path': 'assets/stacked_sprites/van.png',
         'num_layers': 20,
         'scale': 6,
         'y_offset': 10,
+
     },
     'tank': {
         'path': 'assets/stacked_sprites/tank.png',
@@ -110,6 +130,7 @@ STACKED_SPRITE_ATTRS = {
         'scale': 8,
         'y_offset': 0,
         'mask_layer': 4,
+
     },
 }
 
