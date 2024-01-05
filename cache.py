@@ -47,7 +47,6 @@ class Cache:
                 'rotated_sprites': {},
                 'alpha_sprites': {},
                 'collision_masks': {},
-                'nolayerswitch': 'nolayerswitch' in STACKED_SPRITE_ATTRS[obj_name] and STACKED_SPRITE_ATTRS[obj_name]['nolayerswitch']
             }
             attrs = STACKED_SPRITE_ATTRS[obj_name]
             layer_array = self.get_layer_array(attrs)

@@ -11,7 +11,10 @@ PLAYER_SPEED = 0.4
 PLAYER_ROT_SPEED = 0.001
 
 BG_COLOR = 'olivedrab'  #
-NUM_ANGLES = 30  # multiple of 360 -> 24, 30, 36, 40, 45, 60, 72, 90, 120, 180
+NUM_ANGLES = 360  # multiple of 360 -> 24, 30, 36, 40, 45, 60, 72, 90, 120, 180
+
+OFFSETS = {'blacktop': 1000, 'gravel': 1000}
+OFFSETS_ENABLED = set(OFFSETS.keys())
 
 # entity settings
 ENTITY_SPRITE_ATTRS = {
@@ -64,7 +67,6 @@ STACKED_SPRITE_ATTRS = {
         'path': 'assets/entities/level1/town/blacktop.png',
         'y_offset': 0,
         'outline': False,
-        'nolayerswitch': True
    },
    'gravel': {
         'num_layers': 1,
@@ -72,8 +74,8 @@ STACKED_SPRITE_ATTRS = {
         'path': 'assets/entities/level1/town/gravel.png',
         'y_offset': 0,
         'outline': False,
-        'nolayerswitch': True,
-   },
+   },# back to our map this will take a sec to load
+
     'pancake': {
         'path': 'assets/stacked_sprites/pancake.png',
         'num_layers': 11,
@@ -99,8 +101,6 @@ STACKED_SPRITE_ATTRS = {
         'scale': 7,
         'y_offset': 20,
         'outline': False,
-                'nolayerswitch': True
-
     },
     'blue_tree': {
         'path': 'assets/stacked_sprites/blue_tree.png',

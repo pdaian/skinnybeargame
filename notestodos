@@ -2,10 +2,25 @@ music level hearts shooting at harp/piano in sine wave for caroling
 
 
 
+refactors done!
+then a spliff break :) <3
+
+
 next
 -----
+gravel layering glitch fix let's go SOLVED not done lol
+road bullet top glitch SOLVED
+full exploration ui of current map
+beautify
+load times (shader cache?)
 
-sane blacktop whitetop
-extend map
-pine hill cute design
-menu
+mob health for cars+tanks THIS AFTERNOON
+garbage truck mob
+enemy spawn engine / ui (async)
+following ui; steer, accelerate, to 10m away, then shoot every [x]s
+player health/damage from explosions
+game loop
+
+
+menu/ui
+threading for layer updates / framepacing consistency

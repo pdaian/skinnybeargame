@@ -1,0 +1,13 @@
+map = open("pinehilldowntown_partial.csv").read().splitlines()
+map = "\n".join([x + "," for x in map])
+# 3 digits then 2 then 1 to prevent wrong replacement
+map = map.replace("139,", 'gravel,')
+map = map.replace("136,", 'car,')
+map = map.replace("129,", 'tank,')
+map = map.replace("117,", 'van,')
+map = map.replace("63,", 'kitty,')
+map = map.replace("94,", 'blue_tree,')
+map = map.replace("61,", "player,")
+map = map.replace("72,", "grass,")
+map = map.replace("0,", "blacktop,")
+open("pinehilldowntown_partial_parsed.csv", "w").write(map)

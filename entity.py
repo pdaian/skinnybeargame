@@ -39,7 +39,10 @@ class Entity(BaseEntity):
         super().update()
         self.transform()
         self.set_rect()
-        self.change_layer()
+        if self.deferred_updates % 50 == 0:
+            self.change_layer()
+            self.deferred_updates = 0
+        self.deferred_updates += 1
 
     def transform(self):
         pos = self.pos - self.player.offset

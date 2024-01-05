@@ -31,6 +31,10 @@ MAP_SIZE = MAP_WIDTH, MAP_HEIGHT = vec2(len(MAP), len(MAP[0]))
 MAP_CENTER = MAP_SIZE / 2
 print(MAP)
 
+# creating a test case for gravel bug 
+#MAP = [[B],['gravel'],['player']]
+# back to our map this will take a sec to load
+
 class Scene:
     def __init__(self, app):
         self.app = app
@@ -65,6 +69,8 @@ class Scene:
 
     def get_closest_object_to_player(self):
         closest = sorted(self.app.transparent_objects, key=lambda e: e.dist_to_player)
+        if len(closest) == 0:
+            return # no transparent sprites nothing to do
         closest[0].alpha_trigger = True
         closest[1].alpha_trigger = True
 
