@@ -35,16 +35,22 @@ class StackedSprite(pg.sprite.Sprite):
         offset = 0
         if self.name in OFFSETS_ENABLED:
             offset = OFFSETS[self.name]
-        self.group.change_layer(self, self.screen_pos.y - offset)
+        if offset != -1:
+            self.group.change_layer(self, self.screen_pos.y - offset)
+        else:
+            self.group.change_layer(self, -1000)
 
     def transform(self):
         pos = self.pos - self.player.offset
         pos = pos.rotate_rad(self.player.angle)
         self.screen_pos = pos + CENTER
+        if self.name == "blacktop":
+            print(self.screen_pos)
 
     def get_angle(self):
         self.angle = -math.degrees(self.player.angle) // self.viewing_angle + self.rot
         self.angle = int(self.angle % NUM_ANGLES)
+
 
     def update(self):
         self.transform()

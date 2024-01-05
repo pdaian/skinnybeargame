@@ -3,7 +3,7 @@ from settings import *
 from cache import Cache
 from player import Player
 from scene import Scene
-
+import pickle, os, dill
 
 class App:
     def __init__(self):
@@ -19,7 +19,14 @@ class App:
         self.collision_group = pg.sprite.Group()
         self.transparent_objects = []
         # game objects
-        self.cache = Cache()
+            
+        if not os.path.exists("cache.bin"):
+            self.cache = Cache()
+            dill.detect.trace(True)
+            print(dill.detect.errors(self.cache))
+            pickle.dump(self.cache, open("cache.bin", 'wb'), -1)
+        else:
+            self.cache = pickle.load(open("cache.bin", 'rb'))
         self.player = Player(self)
         self.scene = Scene(self)
 
