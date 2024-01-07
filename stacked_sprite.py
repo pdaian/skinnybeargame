@@ -44,8 +44,6 @@ class StackedSprite(pg.sprite.Sprite):
         pos = self.pos - self.player.offset
         pos = pos.rotate_rad(self.player.angle)
         self.screen_pos = pos + CENTER
-        if self.name == "blacktop":
-            print(self.screen_pos)
 
     def get_angle(self):
         self.angle = -math.degrees(self.player.angle) // self.viewing_angle + self.rot

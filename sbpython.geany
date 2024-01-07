@@ -28,20 +28,19 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=0
-FILE_NAME_0=606;Python;0;EUTF-8;0;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cmain.py;0;4
+current_page=5
+FILE_NAME_0=1171;Python;0;EUTF-8;0;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cmain.py;0;4
 FILE_NAME_1=341;Python;0;EUTF-8;0;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cbullet.py;0;4
-FILE_NAME_2=22;Python;0;EUTF-8;0;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Ccache.py;0;4
+FILE_NAME_2=536;Python;0;EUTF-8;0;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Ccache.py;0;4
 FILE_NAME_3=1319;Python;0;EUTF-8;0;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Centity.py;0;4
-FILE_NAME_4=431;Python;0;EUTF-8;0;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cplayer.py;0;4
-FILE_NAME_5=279;Python;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Csettings.py;0;4
-FILE_NAME_6=67;Python;0;EUTF-8;0;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cstacked_sprite.py;0;4
-FILE_NAME_7=504;None;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cnotestodos;0;4
-FILE_NAME_8=283;None;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Csbmap.csv;0;4
-FILE_NAME_9=401;Python;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cmapreplace.py;0;4
-FILE_NAME_10=1272;None;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cpinehilldowntown_partial.csv;0;4
-FILE_NAME_11=2442;None;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cpinehilldowntown_partial_parsed.csv;0;4
-FILE_NAME_12=1669;Python;0;EUTF-8;0;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cscene.py;0;4
+FILE_NAME_4=1674;Python;0;EUTF-8;0;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cplayer.py;0;4
+FILE_NAME_5=281;Python;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Csettings.py;0;4
+FILE_NAME_6=1740;Python;0;EUTF-8;0;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cstacked_sprite.py;0;4
+FILE_NAME_7=578;None;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cnotestodos;0;4
+FILE_NAME_8=401;Python;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cmapreplace.py;0;4
+FILE_NAME_9=1871;None;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cpinehilldowntown_partial.csv;0;4
+FILE_NAME_10=2442;None;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cpinehilldowntown_partial_parsed.csv;0;4
+FILE_NAME_11=1669;Python;0;EUTF-8;0;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cscene.py;0;4
 
 [build-menu]
 EX_00_LB=_Execute
@@ -51,3 +50,6 @@ PythonFT_00_LB=_Compile
 PythonFT_00_CM=python3 -m compileall .
 PythonFT_00_WD=
 filetypes=Python;
+PythonFT_01_LB=build map
+PythonFT_01_CM=python3 mapreplace.py
+PythonFT_01_WD=

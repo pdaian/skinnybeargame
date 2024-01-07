@@ -11,9 +11,9 @@ PLAYER_SPEED = 0.4
 PLAYER_ROT_SPEED = 0.001
 
 BG_COLOR = 'olivedrab'  #
-NUM_ANGLES = 1  # multiple of 360 -> 24, 30, 36, 40, 45, 60, 72, 90, 120, 180
+NUM_ANGLES = 360  # multiple of 360 -> 24, 30, 36, 40, 45, 60, 72, 90, 120, 180
 
-OFFSETS = {'blacktop': -1, 'gravel': 1000}
+OFFSETS = {'blacktop': -1, 'gravel': 5000}
 OFFSETS_ENABLED = set(OFFSETS.keys())
 
 # entity settings
@@ -63,14 +63,14 @@ STACKED_SPRITE_ATTRS = {
     },
     'blacktop': {
         'num_layers': 1,
-        'scale': 6.1,
+        'scale': 6.2,
         'path': 'assets/entities/level1/town/blacktop.png',
         'y_offset': 0,
         'outline': False,
    },
    'gravel': {
         'num_layers': 1,
-        'scale': 6.1,
+        'scale': 6.4,
         'path': 'assets/entities/level1/town/gravel.png',
         'y_offset': 0,
         'outline': False,

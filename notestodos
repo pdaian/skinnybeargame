@@ -4,13 +4,17 @@ music level hearts shooting at harp/piano in sine wave for caroling
 next
 -----
 
-let's clean up the gravel and blacktop textures a little
+let's clean up the gravel textures a little
+mob health for cars+tanks, explosions too! THIS AFTERNOON
+mob spawning / ai engine
+--> playable level!!
+
 
 full exploration ui of current map
 beautify
 load times (shader cache?)
+controller support
 
-mob health for cars+tanks THIS AFTERNOON
 garbage truck mob
 enemy spawn engine / ui (async)
 following ui; steer, accelerate, to 10m away, then shoot every [x]s
