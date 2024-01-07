@@ -40,6 +40,21 @@ ENTITY_SPRITE_ATTRS = {
         'y_offset': 50, 
         'reverse': True
     },
+    'objectexplosion': {
+        'num_layers': 7,
+        'scale': 2,
+        'path': 'assets/entities/explosion/explosion.png',
+        'y_offset': 50, 
+        'reverse': True
+
+    },
+    'pigeon': {
+        'path': 'assets/entities/level1/enemies/pigeon/pigeon.png',
+        'num_layers': 3,
+        'scale': 10,
+        'y_offset': 50,
+        'health': 10,
+    },
     'bullet': {
         'num_layers': 1,
         'scale': 0.8,
@@ -75,7 +90,6 @@ STACKED_SPRITE_ATTRS = {
         'y_offset': 0,
         'outline': False,
    },
-
     'pancake': {
         'path': 'assets/stacked_sprites/pancake.png',
         'num_layers': 11,
@@ -115,6 +129,7 @@ STACKED_SPRITE_ATTRS = {
         'num_layers': 9,
         'scale': 10,
         'y_offset': 10,
+        'health': 15,
 
     },
     'van': {
@@ -122,7 +137,7 @@ STACKED_SPRITE_ATTRS = {
         'num_layers': 20,
         'scale': 6,
         'y_offset': 10,
-
+        'health': 25,
     },
     'tank': {
         'path': 'assets/stacked_sprites/tank.png',
@@ -130,7 +145,7 @@ STACKED_SPRITE_ATTRS = {
         'scale': 8,
         'y_offset': 0,
         'mask_layer': 4,
-
+        'health': 50,
     },
 }
 

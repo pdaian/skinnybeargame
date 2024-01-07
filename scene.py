@@ -1,6 +1,7 @@
 from stacked_sprite import *
 from random import uniform
 from entity import Entity
+import enemies
 
 P = 'player'
 K = 'kitty'  # entity
@@ -39,7 +40,9 @@ class Scene:
     def __init__(self, app):
         self.app = app
         self.transform_objects = []
+        self.enemy_spawners = []
         self.load_scene()
+        enemies.run_enemy_loop(self.enemy_spawners, app)
 
     def load_scene(self):
         rand_rot = lambda: uniform(0, 360)
@@ -52,7 +55,11 @@ class Scene:
                 if name == 'player':
                     self.app.player.offset = pos * TILE_SIZE
                 elif name == 'kitty':
-                    Entity(self.app, name=name, pos=pos)
+                    Entity(self.app, name=name, pos=pos, collision=False)
+                elif name == 'pigeon':
+                    spawner = Entity(self.app, name=name, pos=pos, collision=True)
+                    print("spawner pos", pos, spawner.pos)
+                    self.enemy_spawners.append(spawner)
                 elif name == 'blue_tree':
                     TrnspStackedSprite(self.app, name=name, pos=rand_pos(pos), rot=rand_rot())
                 elif name == 'grass':

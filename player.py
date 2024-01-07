@@ -6,7 +6,7 @@ from bullet import Bullet
 
 class Player(BaseEntity):
     def __init__(self, app, name='player'):
-        super().__init__(app, name)
+        super().__init__(app, name, False)
         self.group.change_layer(self, CENTER.y)
 
         self.rect = self.image.get_rect(center=CENTER)

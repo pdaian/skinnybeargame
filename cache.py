@@ -29,6 +29,7 @@ class Cache:
 
             mask = self.get_entity_mask(attrs, images)
             self.entity_sprite_cache[sprite_name]['mask'] = mask
+            self.entity_sprite_cache[sprite_name]['health'] = attrs['health'] if 'health' in attrs else None
 
 
     def get_entity_mask(self, attrs, images):
@@ -47,6 +48,7 @@ class Cache:
                 'rotated_sprites': {},
                 'alpha_sprites': {},
                 'collision_masks': {},
+                'health': STACKED_SPRITE_ATTRS[obj_name]['health'] if 'health' in STACKED_SPRITE_ATTRS[obj_name] else None
             }
             attrs = STACKED_SPRITE_ATTRS[obj_name]
             layer_array = self.get_layer_array(attrs)

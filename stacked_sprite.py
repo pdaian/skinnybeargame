@@ -20,6 +20,7 @@ class StackedSprite(pg.sprite.Sprite):
         self.viewing_angle = app.cache.viewing_angle
         self.rotated_sprites = self.cache[name]['rotated_sprites']
         self.collision_masks = self.cache[name]['collision_masks']
+        self.health = self.cache[name]['health']
 
         self.angle = 0
         self.screen_pos = vec2(0)

@@ -2,7 +2,7 @@ from settings import *
 
 
 class BaseEntity(pg.sprite.Sprite):
-    def __init__(self, app, name):
+    def __init__(self, app, name, collision):
         self.app = app
         self.name = name
         self.group = app.main_group
@@ -17,6 +17,10 @@ class BaseEntity(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.frame_index = 0
         self.deferred_updates = 0
+        self.health = entity_cache[name]['health']            
+        if collision:
+            self.app.collision_group.add(self)
+
 
     def animate(self):
         if self.app.anim_trigger:
@@ -28,8 +32,8 @@ class BaseEntity(pg.sprite.Sprite):
 
 
 class Entity(BaseEntity):
-    def __init__(self, app, name, pos):
-        super().__init__(app, name)
+    def __init__(self, app, name, pos, collision):
+        super().__init__(app, name, collision)
         self.pos = vec2(pos) * TILE_SIZE
         self.player = app.player
         self.y_offset = vec2(0, self.attrs['y_offset'])

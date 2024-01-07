@@ -3,7 +3,7 @@ from entity import *
 
 class Explosion(Entity):
     def __init__(self, app, name='explosion', pos=(0, 0)):
-        super().__init__(app, name, pos)
+        super().__init__(app, name, pos, False)
         self.life_time_cycles = self.attrs['num_layers'] - 1
         self.cycles = 0
         self.transform()
@@ -25,7 +25,7 @@ class Explosion(Entity):
 
 class Bullet(BaseEntity):
     def __init__(self, app, name='bullet', pos=(0, 0)):
-        super().__init__(app, name)
+        super().__init__(app, name, False)
         self.pos = vec2((pos[0] + 10, pos[1]))
         self.player = app.player
         self.y_offset = self.attrs['y_offset']
@@ -42,6 +42,12 @@ class Bullet(BaseEntity):
         hits = pg.sprite.spritecollide(self, self.app.collision_group,
                                       dokill=False, collided=pg.sprite.collide_mask)
         if hits:
+            sprite_hit = hits[0]
+            if sprite_hit.health is not None:
+                sprite_hit.health -= 1
+            if sprite_hit.health == 0:
+                sprite_hit.kill()
+                Explosion(self.app, name="objectexplosion", pos=sprite_hit.pos/TILE_SIZE) 
             Explosion(self.app, pos=(self.pos + self.player.offset) / TILE_SIZE)
             self.kill()
 
