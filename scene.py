@@ -32,9 +32,6 @@ MAP_SIZE = MAP_WIDTH, MAP_HEIGHT = vec2(len(MAP), len(MAP[0]))
 MAP_CENTER = MAP_SIZE / 2
 print(MAP)
 
-# creating a test case for gravel bug 
-#MAP = [[B],['gravel'],['player']]
-# back to our map this will take a sec to load
 
 class Scene:
     def __init__(self, app):
@@ -57,7 +54,14 @@ class Scene:
                 elif name == 'kitty':
                     Entity(self.app, name=name, pos=pos, collision=False)
                 elif name == 'pigeon':
-                    spawner = Entity(self.app, name=name, pos=pos, collision=True)
+                    spawner = Entity(self.app, name='entityspawner', pos=pos, collision=False)
+                    spawner.spawn_name = 'pigeon'
+                    spawner.spawn_every = 15
+                    spawner.insta = True
+                    spawner.follow_speed = 20.0
+                    spawner.follow_within = 500.0
+                    spawner.stop_following_at = 300.0
+                    spawner.does_damage = True
                     print("spawner pos", pos, spawner.pos)
                     self.enemy_spawners.append(spawner)
                 elif name == 'blue_tree':
@@ -71,6 +75,8 @@ class Scene:
                 elif name == "blacktop" or name=="gravel":
                     print("placing", name, pos)
                     StackedSprite(self.app, name=name, pos=pos, collision=False)
+                elif name == "wellington":
+                    StackedSprite(self.app, name=name, pos=pos, rot=90)
                 elif name:
                     StackedSprite(self.app, name=name, pos=rand_pos(pos), rot=rand_rot())
 

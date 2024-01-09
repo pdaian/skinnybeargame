@@ -30,6 +30,7 @@ class StackedSprite(pg.sprite.Sprite):
         self.mask = self.collision_masks[self.angle]
         self.rect = self.image.get_rect()
         self.deferred_updates = 0
+        self.does_damage = False
 
     def change_layer(self):
         #print("changing layer to ", self.name, self.screen_pos.y)

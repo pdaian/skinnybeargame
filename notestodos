@@ -5,6 +5,13 @@ next
 -----
 
 mob spawning / ai engine LET'S GO
+
+todo: health bar for sb
+damage on collisions
+friendly npc dialog + follows
+
+flatten all classes for performance (yes its python but cmon)
+
 ( all art at this stage is placeholder; see credits here )
 --> playable level!!
 
@@ -13,6 +20,8 @@ full exploration ui of current map
 beautify
 load times (shader cache?)
 controller support
+visible health bar for monsters?
+
 
 garbage truck mob
 enemy spawn engine / ui (async)

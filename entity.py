@@ -1,6 +1,5 @@
 from settings import *
 
-
 class BaseEntity(pg.sprite.Sprite):
     def __init__(self, app, name, collision):
         self.app = app
@@ -20,6 +19,8 @@ class BaseEntity(pg.sprite.Sprite):
         self.health = entity_cache[name]['health']            
         if collision:
             self.app.collision_group.add(self)
+        self.velocity = None
+        self.does_damage = False
 
 
     def animate(self):
@@ -42,11 +43,16 @@ class Entity(BaseEntity):
     def update(self):
         super().update()
         self.transform()
+        if self.velocity is not None:
+            self.move()
         self.set_rect()
         if self.deferred_updates % 50 == 0:
             self.change_layer()
             self.deferred_updates = 0
         self.deferred_updates += 1
+        
+    def move(self):
+        self.pos += self.velocity.rotate_rad(-self.player.angle)
 
     def transform(self):
         pos = self.pos - self.player.offset
@@ -54,7 +60,10 @@ class Entity(BaseEntity):
         self.screen_pos = pos + CENTER
 
     def change_layer(self):
-        self.group.change_layer(self, self.screen_pos.y)
+        try:
+            self.group.change_layer(self, self.screen_pos.y)
+        except:
+            print("layer change error", self.name, self.pos)
 
     def set_rect(self):
         self.rect.center = self.screen_pos + self.y_offset

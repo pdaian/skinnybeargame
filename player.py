@@ -20,6 +20,7 @@ class Player(BaseEntity):
         self.flipped_right = True
         self.walking = False
         self.animation = ""
+        self.health = 100
         
     def start_walking(self):
         self.walking = True
@@ -97,6 +98,8 @@ class Player(BaseEntity):
                 self.prev_inc = self.inc
         else:
             self.inc = -self.prev_inc
+            if hit[0].does_damage:
+                self.health -= 1
 
     def update(self):
         super().update()

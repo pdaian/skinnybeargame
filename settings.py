@@ -1,9 +1,13 @@
+import sys
 import pygame as pg
+pg.init()
 
 vec2 = pg.math.Vector2
 
 RES = WIDTH, HEIGHT = vec2(1600, 900)
-#RES = WIDTH, HEIGHT = vec2(1920, 1080)
+RES = WIDTH, HEIGHT = vec2(1920, 1080)
+#RES = WIDTH, HEIGHT = vec2(3440, 1440) # just for fun lol
+
 CENTER = H_WIDTH, H_HEIGHT = RES // 2
 TILE_SIZE = 200  #
 
@@ -11,7 +15,11 @@ PLAYER_SPEED = 0.4
 PLAYER_ROT_SPEED = 0.001
 
 BG_COLOR = 'olivedrab'  #
-NUM_ANGLES = 360  # multiple of 360 -> 24, 30, 36, 40, 45, 60, 72, 90, 120, 180
+NUM_ANGLES = 1  # multiple of 360 -> 24, 30, 36, 40, 45, 60, 72, 90, 120, 180
+if len(sys.argv) > 1:
+	NUM_ANGLES = int(sys.argv[1])
+	if len(sys.argv) > 2:
+		RES = WIDTH, HEIGHT = vec2(3440, 1440) # fullscreen
 
 OFFSETS = {'blacktop': -1, 'gravel': 5000}
 OFFSETS_ENABLED = set(OFFSETS.keys())
@@ -54,6 +62,12 @@ ENTITY_SPRITE_ATTRS = {
         'scale': 10,
         'y_offset': 50,
         'health': 10,
+    },
+    'entityspawner': {
+        'path': 'assets/entities/pixel.png',
+        'num_layers': 1,
+        'scale': 1,
+        'y_offset': 1000,
     },
     'bullet': {
         'num_layers': 1,
@@ -108,6 +122,13 @@ STACKED_SPRITE_ATTRS = {
         'num_layers': 16,
         'scale': 5,
         'y_offset': 10,
+    },
+     'wellington': {
+        'path': 'assets/entities/level1/town/wellington.png',
+        'num_layers': 36,
+        'scale': 15,
+        'y_offset': -10,
+        'reverse': True,
     },
     'grass': {
         'path': 'assets/stacked_sprites/grass.png',
