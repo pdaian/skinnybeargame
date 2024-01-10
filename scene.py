@@ -76,7 +76,7 @@ class Scene:
                     print("placing", name, pos)
                     StackedSprite(self.app, name=name, pos=pos, collision=False)
                 elif name == "wellington":
-                    StackedSprite(self.app, name=name, pos=pos, rot=90)
+                    StackedSprite(self.app, name=name, pos=pos, rot=120)
                 elif name:
                     StackedSprite(self.app, name=name, pos=rand_pos(pos), rot=rand_rot())
 

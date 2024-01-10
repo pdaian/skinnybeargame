@@ -127,8 +127,10 @@ STACKED_SPRITE_ATTRS = {
         'path': 'assets/entities/level1/town/wellington.png',
         'num_layers': 36,
         'scale': 15,
-        'y_offset': -10,
+        'y_offset': 0,
         'reverse': True,
+        'outline': False,
+
     },
     'grass': {
         'path': 'assets/stacked_sprites/grass.png',

@@ -60,6 +60,7 @@ class Cache:
         mask_layer = attrs.get('mask_layer', attrs['num_layers'] // 2)
 
         for angle in range(NUM_ANGLES):
+            print("rendering", angle, obj_name)
             surf = pg.Surface(layer_array[0].get_size())
             surf = pg.transform.rotate(surf, angle * self.viewing_angle)
             sprite_surf = pg.Surface([surf.get_width(), surf.get_height()

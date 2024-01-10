@@ -4,10 +4,11 @@ music level hearts shooting at harp/piano in sine wave for caroling
 next
 -----
 
-mob spawning / ai engine LET'S GO
+place and complete alpha wellington
+place and complete alpha shop
+triggers for proximity
 
-todo: health bar for sb
-damage on collisions
+
 friendly npc dialog + follows
 
 flatten all classes for performance (yes its python but cmon)
@@ -32,3 +33,17 @@ game loop
 
 menu/ui
 threading for layer updates / framepacing consistency
+
+
+
+known bugs
+----------
+x death screen keeps re-initializing (done condition?)
+x enemies do not spawn in full screen
+
+
+game plan
+---------
+cute ph downtown w fd, welly, shop, community center, enemy variety
+fun level; welly indoors vs pigeons?
+hire artist + performance optimize
