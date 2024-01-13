@@ -3,11 +3,14 @@ from settings import *
 from cache import Cache
 from player import Player
 from scene import Scene
-
+from pygame._sdl2 import Window, Renderer
 
 class App:
     def __init__(self, cache=None):
+        pg.display.init()
         self.screen = pg.display.set_mode(RES)
+        self.window = Window("sb and the power of <3", resizable=True)
+        self.renderer = Renderer(self.window)
         self.clock = pg.time.Clock()
         self.time = 0
         self.delta_time = 0.01
@@ -34,8 +37,13 @@ class App:
 
     def draw(self):
         # render scene tree
+        self.renderer.clear()
+        self.main_group.draw(self.renderer)
+        self.renderer.present()
+        self.window.title = str(f"FPS: {self.clock.get_fps()}")
+        return
         if self.player.health > 0:
-            self.screen.fill(BG_COLOR)
+            renderer.draw_color = (107, 142, 35, 255)
             self.main_group.draw(self.screen)
             background_rect = pg.Surface((550,150))  # the size of your rect
             background_rect.set_alpha(200)                # alpha level

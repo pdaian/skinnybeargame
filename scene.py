@@ -65,7 +65,7 @@ class Scene:
                     print("spawner pos", pos, spawner.pos)
                     self.enemy_spawners.append(spawner)
                 elif name == 'blue_tree':
-                    TrnspStackedSprite(self.app, name=name, pos=rand_pos(pos), rot=rand_rot())
+                    StackedSprite(self.app, name=name, pos=rand_pos(pos), rot=rand_rot())
                 elif name == 'grass':
                     StackedSprite(self.app, name=name, pos=rand_pos(pos), rot=rand_rot(),
                                   collision=False)

@@ -1,4 +1,5 @@
 from settings import *
+from pygame._sdl2 import Texture, Image
 
 class BaseEntity(pg.sprite.Sprite):
     def __init__(self, app, name, collision):
@@ -11,9 +12,9 @@ class BaseEntity(pg.sprite.Sprite):
         entity_cache = self.app.cache.entity_sprite_cache
         self.images = entity_cache[name]['images']
         self.additional_layers = entity_cache[name].get('additional_layers', None)
-        self.image = self.images[0]
         self.mask = entity_cache[name]['mask']
-        self.rect = self.image.get_rect()
+        self.rect = self.images[0].get_rect()
+        self.image = Image(Texture.from_surface(self.app.renderer, self.images[0]), srcrect=self.rect)
         self.frame_index = 0
         self.deferred_updates = 0
         self.health = entity_cache[name]['health']            
@@ -29,7 +30,8 @@ class BaseEntity(pg.sprite.Sprite):
             self.image = self.images[self.frame_index]
 
     def update(self):
-        self.animate()
+        #self.animate()
+        pass
 
 
 class Entity(BaseEntity):

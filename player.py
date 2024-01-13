@@ -56,6 +56,7 @@ class Player(BaseEntity):
             self.angle -= rot_speed
 
         if key_state[pg.K_w]:
+            print('w')
             self.inc += vec2(0, -speed)
             self.last_direction_mult[1] = -1
         if key_state[pg.K_s]:
@@ -86,6 +87,7 @@ class Player(BaseEntity):
                 self.stop_walking()
         self.inc.rotate_ip_rad(-self.angle)
 
+
     def single_fire(self, event):
         if event.key == pg.K_UP or event.key == pg.K_SPACE:
             Bullet(app=self.app)
@@ -104,7 +106,7 @@ class Player(BaseEntity):
     def update(self):
         super().update()
         self.control()
-        self.check_collision()
+        #self.check_collision()
         self.move()
 
     def move(self):
