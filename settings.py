@@ -83,6 +83,16 @@ and is also cached for all angles of the object, set manually or by default
 equal to num_layer // 2'''
 
 STACKED_SPRITE_ATTRS = {
+     'wellington': {
+        'path': 'assets/entities/level1/town/wellington.png',
+        'num_layers': 35,
+        'mask_layer': 31,
+        'scale': 12,
+        'y_offset': -300,
+        'reverse': True,
+        'outline': False,
+
+    },
     'sphere': {
         'path': 'assets/stacked_sprites/sphere.png',
         'num_layers': 13,
@@ -122,16 +132,6 @@ STACKED_SPRITE_ATTRS = {
         'num_layers': 16,
         'scale': 5,
         'y_offset': 10,
-    },
-     'wellington': {
-        'path': 'assets/entities/level1/town/wellington.png',
-        'num_layers': 35,
-        'mask_layer': 31,
-        'scale': 12,
-        'y_offset': -300,
-        'reverse': True,
-        'outline': False,
-
     },
     'grass': {
         'path': 'assets/stacked_sprites/grass.png',

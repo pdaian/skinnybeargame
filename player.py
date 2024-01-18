@@ -31,17 +31,19 @@ class Player(BaseEntity):
         self.set_animation("default")
         
     def set_animation(self, animation):
-        entity_cache = self.app.cache.entity_sprite_cache
         self.animation = animation
-        self.images = entity_cache[self.name]['additional_states'][animation]
+        self.images = self.all_states[animation]
         self.frame_index = 0
         self.app.anim_trigger = True
         
     def animate(self):
         super().animate()
         if self.app.anim_trigger:
-            if not self.flipped_right:
-                self.image = pg.transform.flip(self.image, True, False)
+            if self.flipped_right:
+                self.image.flip_x = False
+            else:
+                self.image.flip_x = True
+
 
     def control(self):
         self.inc = vec2(0)
@@ -56,7 +58,6 @@ class Player(BaseEntity):
             self.angle -= rot_speed
 
         if key_state[pg.K_w]:
-            print('w')
             self.inc += vec2(0, -speed)
             self.last_direction_mult[1] = -1
         if key_state[pg.K_s]:

@@ -1,5 +1,10 @@
 from settings import *
+from threadutils import threaded
+import time
+from pygame._sdl2 import Texture, Image
+import gpurotate
 
+finished_sprites = set()
 
 class Cache:
     def __init__(self):
@@ -10,6 +15,7 @@ class Cache:
         self.alpha_value = 70  #
         self.get_stacked_sprite_cache()
         self.get_entity_sprite_cache()
+            
 
     def get_entity_sprite_cache(self):
         for sprite_name in ENTITY_SPRITE_ATTRS:
@@ -18,17 +24,17 @@ class Cache:
             }
             attrs = ENTITY_SPRITE_ATTRS[sprite_name]
             images = self.get_layer_array(attrs)
-            self.entity_sprite_cache[sprite_name]['images'] = images
+            self.entity_sprite_cache[sprite_name]['all_states'] = {'default': images}
 
             if 'additional_states' in attrs:
-                self.entity_sprite_cache[sprite_name]['additional_states'] = {'default': images}
                 for state in attrs['additional_states']:
                     keyword = lambda x : x['additional_states'][state]
                     state_layer = self.get_layer_array(attrs, keyword=keyword)
-                    self.entity_sprite_cache[sprite_name]['additional_states'][state] = state_layer
+                    self.entity_sprite_cache[sprite_name]['all_states'][state] = state_layer
 
             mask = self.get_entity_mask(attrs, images)
             self.entity_sprite_cache[sprite_name]['mask'] = mask
+            
             self.entity_sprite_cache[sprite_name]['health'] = attrs['health'] if 'health' in attrs else None
 
 
@@ -53,23 +59,30 @@ class Cache:
             attrs = STACKED_SPRITE_ATTRS[obj_name]
             layer_array = self.get_layer_array(attrs)
             self.run_prerender(obj_name, layer_array, attrs)
+        while not len(STACKED_SPRITE_ATTRS) == len(finished_sprites):
+            time.sleep(1)
 
+    def get_all_rotated_slices(self, attrs, num_slices, viewing_angle):
+        return gpurotate.get_all_slices(attrs['path'], num_slices, NUM_ANGLES, viewing_angle)
+
+    @threaded
     def run_prerender(self, obj_name, layer_array, attrs):
+        global finished_sprites
         outline = attrs.get('outline', True)
         transparency = attrs.get('transparency', False)
         mask_layer = attrs.get('mask_layer', attrs['num_layers'] // 2)
+        all_rotated_slices = self.get_all_rotated_slices(attrs, len(layer_array), self.viewing_angle)
 
         for angle in range(NUM_ANGLES):
             print("rendering", angle, obj_name)
-            surf = pg.Surface(layer_array[0].get_size())
-            surf = pg.transform.rotate(surf, angle * self.viewing_angle)
+            surf = pg.surfarray.make_surface(all_rotated_slices[angle * self.viewing_angle][0])
             sprite_surf = pg.Surface([surf.get_width(), surf.get_height()
-                                      + attrs['num_layers'] * attrs['scale']])
+                                      + attrs['num_layers'] * attrs['scale']]) # todo make this use renderer
             sprite_surf.fill('khaki')
             sprite_surf.set_colorkey('khaki')
 
-            for ind, layer in enumerate(layer_array):
-                layer = pg.transform.rotate(layer, angle * self.viewing_angle)
+            for ind, layer in enumerate(layer_array): # todo no need for layer array here i believe, don't build it?
+                layer = pg.surfarray.make_surface(all_rotated_slices[angle * self.viewing_angle][ind]) # todo replace w lookup
                 sprite_surf.blit(layer, (0, ind * attrs['scale']))
 
                 # get collision mask
@@ -90,9 +103,9 @@ class Cache:
                 alpha_sprite = pg.transform.flip(alpha_sprite, True, True)
                 self.stacked_sprite_cache[obj_name]['alpha_sprites'][angle] = alpha_sprite
 
-            image = pg.transform.flip(sprite_surf, True, True)
+            image = pg.transform.flip(sprite_surf, True, True) # can we do something faster here
             self.stacked_sprite_cache[obj_name]['rotated_sprites'][angle] = image
-
+        finished_sprites.add(obj_name)
 
 
     def get_layer_array(self, attrs, keyword=lambda x : x['path']):
@@ -111,7 +124,8 @@ class Cache:
         for y in range(0, sheet_height, sprite_height):
             sprite = sprite_sheet.subsurface((0, y, sheet_width, sprite_height))
             layer_array.append(sprite)
-        returnval = layer_array[::-1]
         if 'reverse' in attrs and attrs['reverse']:
-            return list(reversed(returnval))
+            returnval = layer_array
+        else:
+            returnval = layer_array[::-1]
         return returnval

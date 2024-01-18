@@ -38,10 +38,11 @@ class App:
     def draw(self):
         # render scene tree
         self.renderer.clear()
+        self.renderer.draw_color = (107, 142, 35, 255)
         self.main_group.draw(self.renderer)
         self.renderer.present()
         self.window.title = str(f"FPS: {self.clock.get_fps()}")
-        return
+        return # todo clean below reprod health display eol screen
         if self.player.health > 0:
             renderer.draw_color = (107, 142, 35, 255)
             self.main_group.draw(self.screen)

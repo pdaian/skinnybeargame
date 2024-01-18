@@ -10,11 +10,21 @@ class BaseEntity(pg.sprite.Sprite):
 
         self.attrs = ENTITY_SPRITE_ATTRS[name]
         entity_cache = self.app.cache.entity_sprite_cache
-        self.images = entity_cache[name]['images']
-        self.additional_layers = entity_cache[name].get('additional_layers', None)
+        self.all_states = entity_cache[name]['all_states']
+        self.images = self.all_states['default']
         self.mask = entity_cache[name]['mask']
         self.rect = self.images[0].get_rect()
-        self.image = Image(Texture.from_surface(self.app.renderer, self.images[0]), srcrect=self.rect)
+        
+        # upload all computed surfaces into gpu memory
+        # todo optimize this by doing surface computations in-gpu
+        for state in self.all_states.keys():
+            for image_index in range(len(self.all_states[state])):
+                if not isinstance(self.all_states[state][image_index], Image):
+                    # upload image to gpu as texture if not already done in cache
+                    self.all_states[state][image_index] = Image(Texture.from_surface(self.app.renderer, self.all_states[state][image_index]), srcrect=self.rect)
+
+        self.images = self.all_states['default'] 
+        self.image = self.images[0]
         self.frame_index = 0
         self.deferred_updates = 0
         self.health = entity_cache[name]['health']            
@@ -30,7 +40,7 @@ class BaseEntity(pg.sprite.Sprite):
             self.image = self.images[self.frame_index]
 
     def update(self):
-        #self.animate()
+        self.animate()
         pass
 
 

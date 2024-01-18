@@ -2,7 +2,6 @@ from settings import *
 import math
 from pygame._sdl2 import Texture, Image
 
-
 class StackedSprite(pg.sprite.Sprite):
     def __init__(self, app, name, pos, rot=0, collision=True):
         self.app = app
@@ -28,8 +27,15 @@ class StackedSprite(pg.sprite.Sprite):
         self.rot = (rot % 360) // self.viewing_angle
 
         self.rect = self.rotated_sprites[self.angle].get_rect()
-        self.texture = Texture.from_surface(self.app.renderer, self.rotated_sprites[self.angle])
-        self.image = Image(self.texture, srcrect=self.rect)
+        
+        # upload all computed surfaces into gpu memory
+        # todo optimize this by doing surface computations in-gpu
+        all_angles = list(self.rotated_sprites.keys())[:]
+        for angle in all_angles:
+            if not isinstance(self.rotated_sprites[angle], Image):
+                self.rotated_sprites[angle] = Image(Texture.from_surface(self.app.renderer, self.rotated_sprites[angle]), srcrect=self.rotated_sprites[angle].get_rect())
+
+        self.image = self.rotated_sprites[self.angle]
         self.mask = self.collision_masks[self.angle]
         self.deferred_updates = 0
         self.does_damage = False
@@ -67,8 +73,8 @@ class StackedSprite(pg.sprite.Sprite):
         self.deferred_updates += 1
 
     def get_image(self):
-        #self.image = self.rotated_sprites[self.angle]
-        #self.mask = self.collision_masks[self.angle]
+        self.image = self.rotated_sprites[self.angle]
+        self.mask = self.collision_masks[self.angle]
         self.rect = self.image.get_rect(center=self.screen_pos + self.y_offset)
 
 
