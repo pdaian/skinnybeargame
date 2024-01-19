@@ -3,8 +3,37 @@ from threadutils import threaded
 import time
 from pygame._sdl2 import Texture, Image
 import gpurotate
+import numpy
+import pygame.pixelcopy
 
 finished_sprites = set()
+
+
+
+# https://github.com/pygame/pygame/issues/1244
+def make_surface_rgba(array):
+    """Returns a surface made from a [w, h, 4] numpy array with per-pixel alpha
+    """
+    shape = array.shape
+    if len(shape) != 3 and shape[2] != 4:
+        raise ValueError("Array not RGBA")
+
+    # Create a surface the same width and height as array and with
+    # per-pixel alpha.
+    surface = pygame.Surface(shape[0:2], pygame.SRCALPHA, 32)
+
+    # Copy the rgb part of array to the new surface.
+    pygame.pixelcopy.array_to_surface(surface, array[:,:,0:3])
+
+    # Copy the alpha part of array to the surface using a pixels-alpha
+    # view of the surface.
+    surface_alpha = numpy.array(surface.get_view('A'), copy=False)
+    surface_alpha[:,:] = array[:,:,3]
+
+    return surface
+
+
+
 
 class Cache:
     def __init__(self):
@@ -62,8 +91,8 @@ class Cache:
         while not len(STACKED_SPRITE_ATTRS) == len(finished_sprites):
             time.sleep(1)
 
-    def get_all_rotated_slices(self, attrs, num_slices, viewing_angle):
-        return gpurotate.get_all_slices(attrs['path'], num_slices, NUM_ANGLES, viewing_angle)
+    def get_all_rotated_slices(self, attrs, num_slices, viewing_angle, scale):
+        return gpurotate.get_all_slices(attrs['path'], num_slices, NUM_ANGLES, viewing_angle, scale)
 
     @threaded
     def run_prerender(self, obj_name, layer_array, attrs):
@@ -71,18 +100,19 @@ class Cache:
         outline = attrs.get('outline', True)
         transparency = attrs.get('transparency', False)
         mask_layer = attrs.get('mask_layer', attrs['num_layers'] // 2)
-        all_rotated_slices = self.get_all_rotated_slices(attrs, len(layer_array), self.viewing_angle)
+        all_rotated_slices = self.get_all_rotated_slices(attrs, len(layer_array), self.viewing_angle, attrs['scale'])
+
 
         for angle in range(NUM_ANGLES):
             print("rendering", angle, obj_name)
-            surf = pg.surfarray.make_surface(all_rotated_slices[angle * self.viewing_angle][0])
+            surf = make_surface_rgba(all_rotated_slices[angle * self.viewing_angle][0])
             sprite_surf = pg.Surface([surf.get_width(), surf.get_height()
                                       + attrs['num_layers'] * attrs['scale']]) # todo make this use renderer
             sprite_surf.fill('khaki')
             sprite_surf.set_colorkey('khaki')
 
             for ind, layer in enumerate(layer_array): # todo no need for layer array here i believe, don't build it?
-                layer = pg.surfarray.make_surface(all_rotated_slices[angle * self.viewing_angle][ind]) # todo replace w lookup
+                layer = make_surface_rgba(all_rotated_slices[angle * self.viewing_angle][ind]) # todo replace w lookup
                 sprite_surf.blit(layer, (0, ind * attrs['scale']))
 
                 # get collision mask

@@ -7,6 +7,7 @@ from pygame._sdl2 import Window, Renderer
 
 class App:
     def __init__(self, cache=None):
+        self.done = False
         pg.display.init()
         self.screen = pg.display.set_mode(RES)
         self.window = Window("sb and the power of <3", resizable=True)
@@ -27,7 +28,6 @@ class App:
             self.cache = Cache()
         self.player = Player(self)
         self.scene = Scene(self)
-        self.done = False
 
     def update(self):
         self.scene.update()
@@ -72,7 +72,7 @@ class App:
         for e in pg.event.get():
             if e.type == pg.QUIT or (e.type == pg.KEYDOWN and e.key == pg.K_ESCAPE):
                 self.done = True
-                #pg.quit()
+                pg.quit()
                 #sys.exit()
             elif e.type == self.anim_event:
                 self.anim_trigger = True

@@ -31,18 +31,22 @@ def rotate_image(mat, angle):
     return rotated_mat
 
 
-def get_all_slices(path, num_slices, num_angles, viewing_angle):
+def get_all_slices(path, num_slices, num_angles, viewing_angle, scale):
     starttime = time.time()
     print("rotating", path)
     # load the input image
-    img = cv2.imread(path)
-    slices = np.split(img, num_slices)
+    img = cv2.imread(path, cv2.IMREAD_UNCHANGED)
+    img = cv2.resize(img, None, fx=scale, fy=scale, interpolation = cv2.INTER_NEAREST)
+    slices = np.split(img, num_slices)[::-1] # todo handle reverse efficiently
+    if "wellington" in path:
+        for i in range(len(slices)):
+            cv2.imwrite("%d.png" % (i), slices[i])
     all_slices = {}
     for angle in range(num_angles):
         all_slices[angle*viewing_angle] = []
     for angle in range(num_angles ):
         for slice_num in range(len(slices)):
-            rotated_image = rotate_image(slices[slice_num], angle * viewing_angle)
+            rotated_image = rotate_image(slices[slice_num],270 +  angle * viewing_angle) # todo is this 90 constant correct
             all_slices[angle * viewing_angle].append(rotated_image)
     print("done rotatating at", time.time() - starttime)
     return all_slices
