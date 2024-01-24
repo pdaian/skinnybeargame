@@ -31,14 +31,16 @@ def rotate_image(mat, angle):
     return rotated_mat
 
 
-def get_all_slices(path, num_slices, num_angles, viewing_angle, scale):
+def get_all_slices(attrs, num_slices, num_angles, viewing_angle, scale): # todo pull these params from attrs anyway
     starttime = time.time()
-    print("rotating", path)
+    print("rotating", attrs['path'])
     # load the input image
-    img = cv2.imread(path, cv2.IMREAD_UNCHANGED)
+    img = cv2.imread(attrs['path'], cv2.IMREAD_UNCHANGED)
     img = cv2.resize(img, None, fx=scale, fy=scale, interpolation = cv2.INTER_NEAREST)
-    slices = np.split(img, num_slices)[::-1] # todo handle reverse efficiently
-    if "wellington" in path:
+    slices = np.split(img, num_slices)
+    if 'reverse' not in attrs or not attrs['reverse']:
+        slices = slices[::-1] # todo handle reverse efficiently
+    if "wellington" in attrs['path']:
         for i in range(len(slices)):
             cv2.imwrite("%d.png" % (i), slices[i])
     all_slices = {}

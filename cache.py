@@ -92,7 +92,7 @@ class Cache:
             time.sleep(1)
 
     def get_all_rotated_slices(self, attrs, num_slices, viewing_angle, scale):
-        return gpurotate.get_all_slices(attrs['path'], num_slices, NUM_ANGLES, viewing_angle, scale)
+        return gpurotate.get_all_slices(attrs, num_slices, NUM_ANGLES, viewing_angle, scale)
 
     @threaded
     def run_prerender(self, obj_name, layer_array, attrs):
