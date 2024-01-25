@@ -50,10 +50,10 @@ def run_enemy_loop(enemy_spawners, app):
             if time.time() - enemy_spawner.last_updated > enemy_spawner.spawn_every:
                 print("spawning")
                 enemy_spawner.last_updated = time.time()
-                if len(enemy_spawner.enemies_spawned) > 0:
-                    if enemy_spawner.enemies_spawned[-1].health > 0:
-                        print("declining to spawn; enemy exists with health")
-                        continue # nothing further to do at this spawner
+                #if len(enemy_spawner.enemies_spawned) > 0:
+                #    if enemy_spawner.enemies_spawned[-1].health > 0:
+                #        print("declining to spawn; enemy exists with health")
+                #        continue # nothing further to do at this spawner
                 enemy = Entity(app, name=enemy_spawner.spawn_name, pos=enemy_spawner.pos/TILE_SIZE, collision=True)
                 enemy.follow_speed = enemy_spawner.follow_speed
                 enemy.follow_within = enemy_spawner.follow_within
@@ -77,7 +77,7 @@ def run_enemy_loop(enemy_spawners, app):
             if enemy.following:
                 normalized_vector = vector_to / distance_away
                 print("setting velocity to", normalized_vector)
-                enemy.velocity = normalized_vector
+                enemy.velocity = normalized_vector * enemy.follow_speed
 
         # enemy attack loop; shoot attacks at player
         

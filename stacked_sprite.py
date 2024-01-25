@@ -24,6 +24,7 @@ class StackedSprite(pg.sprite.Sprite):
 
         self.angle = 0
         self.screen_pos = vec2(0)
+        print(rot, self.viewing_angle)
         self.rot = (rot % 360) // self.viewing_angle
 
         self.image = self.rotated_sprites[self.angle]

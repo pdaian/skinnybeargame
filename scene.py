@@ -56,10 +56,10 @@ class Scene:
                 elif name == 'pigeon':
                     spawner = Entity(self.app, name='entityspawner', pos=pos, collision=False)
                     spawner.spawn_name = 'pigeon'
-                    spawner.spawn_every = 15
+                    spawner.spawn_every = 30
                     spawner.insta = True
-                    spawner.follow_speed = 20.0
-                    spawner.follow_within = 500.0
+                    spawner.follow_speed = 3.1
+                    spawner.follow_within = 5000000.0
                     spawner.stop_following_at = 300.0
                     spawner.does_damage = True
                     print("spawner pos", pos, spawner.pos)

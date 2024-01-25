@@ -3,7 +3,7 @@ from settings import *
 from cache import Cache
 from player import Player
 from scene import Scene
-
+import time
 
 class App:
     def __init__(self, cache=None):
@@ -25,6 +25,8 @@ class App:
         self.player = Player(self)
         self.scene = Scene(self)
         self.done = False
+        self.start = time.time()
+        self.end = 0
 
     def update(self):
         self.scene.update()
@@ -46,17 +48,25 @@ class App:
             self.screen.blit(text, (WIDTH-500, 10))
             pg.display.flip()
         else:
+            if self.end == 0:
+                self.end = time.time()
             #self.done = True
             self.screen.fill((64,48,27))
             font = pg.font.Font("assets/fonts/yarn.ttf", size=100)
             text = font.render("skinny bear has run out of yarn", 1, (222,20,20)) # Arguments are: text, anti-aliasing, color
             self.screen.blit(text, (200, H_HEIGHT-300))
-            text = font.render("this kills the skinny bear :(", 1, (222,20,20)) # Arguments are: text, anti-aliasing, color
+            text = font.render("this kills the bear :(", 1, (222,20,20)) # Arguments are: text, anti-aliasing, color
             self.screen.blit(text, (200, H_HEIGHT-200))
             text = font.render("SPACE - restart esc - give up", 1, (222,20,20)) # Arguments are: text, anti-aliasing, color
             self.screen.blit(text, (200, H_HEIGHT+100))
+            high_score = int(open('hs').read().strip())
+            score = int(self.end - self.start)
+            if score > high_score:
+                open('hs', 'w').write(str(score))
+            text = font.render("score: %d highest ever score: %d" % (score, high_score), 1, (222,20,20)) # Arguments are: text, anti-aliasing, color
+            self.screen.blit(text, (200, H_HEIGHT+200))
             pg.display.flip()
-            
+
 
     def check_events(self):
         self.anim_trigger = False
