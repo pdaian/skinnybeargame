@@ -30,8 +30,7 @@ class StackedSprite(pg.sprite.Sprite):
         
         # upload all computed surfaces into gpu memory
         # todo optimize this by doing surface computations in-gpu
-        all_angles = list(self.rotated_sprites.keys())[:]
-        for angle in all_angles:
+        for angle in range(len(self.rotated_sprites)):
             if not isinstance(self.rotated_sprites[angle], Image):
                 self.rotated_sprites[angle] = Image(Texture.from_surface(self.app.renderer, self.rotated_sprites[angle]), srcrect=self.rotated_sprites[angle].get_rect())
 

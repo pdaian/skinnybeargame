@@ -5,6 +5,7 @@ from pygame._sdl2 import Texture, Image
 import gpurotate
 import numpy
 import pygame.pixelcopy
+import pickle
 
 finished_sprites = set()
 
@@ -94,13 +95,23 @@ class Cache:
     def get_all_rotated_slices(self, attrs, num_slices, viewing_angle, scale):
         return gpurotate.get_all_slices(attrs, num_slices, NUM_ANGLES, viewing_angle, scale)
 
-    @threaded
+    #@threaded
     def run_prerender(self, obj_name, layer_array, attrs):
         global finished_sprites
+        all_rotated_slices = self.get_all_rotated_slices(attrs, len(layer_array), self.viewing_angle, attrs['scale']) # cachegen line
+        
+        # ~ cachekey = "cache/%s" % (attrs['path'].split("/")[-1])
+        # ~ unscaled_images = [make_surface_rgba(x) for x in pickle.load(open(cachekey, 'rb'))]
+        # ~ self.stacked_sprite_cache[obj_name]['rotated_sprites'] = [pg.transform.flip(pg.transform.scale(x, vec2(x.get_size()) * attrs['scale']), False, False) for x in unscaled_images]
+        # ~ self.stacked_sprite_cache[obj_name]['collision_masks'] = [pg.mask.from_surface(self.stacked_sprite_cache[obj_name]['rotated_sprites'][angle]) for angle in range(len(self.stacked_sprite_cache[obj_name]['rotated_sprites']))]
+        
+        # ~ finished_sprites.add(obj_name)
+        # ~ return # todo delete below dead code
+
         outline = attrs.get('outline', True)
         transparency = attrs.get('transparency', False)
         mask_layer = attrs.get('mask_layer', attrs['num_layers'] // 2)
-        all_rotated_slices = self.get_all_rotated_slices(attrs, len(layer_array), self.viewing_angle, attrs['scale'])
+        all_rotated_slices = self.get_all_rotated_slices(attrs, len(layer_array), self.viewing_angle, attrs['scale']) # cachegen line
 
 
         for angle in range(NUM_ANGLES):
@@ -110,7 +121,6 @@ class Cache:
                                       + attrs['num_layers'] * attrs['scale']]) # todo make this use renderer
             sprite_surf.fill('khaki')
             sprite_surf.set_colorkey('khaki')
-
             for ind, layer in enumerate(layer_array): # todo no need for layer array here i believe, don't build it?
                 layer = make_surface_rgba(all_rotated_slices[angle * self.viewing_angle][ind]) # todo replace w lookup
                 sprite_surf.blit(layer, (0, ind * attrs['scale']))
@@ -135,6 +145,12 @@ class Cache:
 
             image = pg.transform.flip(sprite_surf, True, True) # can we do something faster here
             self.stacked_sprite_cache[obj_name]['rotated_sprites'][angle] = image
+            #pg.surfarray.pixels3d(image).tofile("cache/%s-%d" % (obj_name, angle))
+            
+
+
+
+
         finished_sprites.add(obj_name)
 
 

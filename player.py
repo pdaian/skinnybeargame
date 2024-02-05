@@ -107,7 +107,7 @@ class Player(BaseEntity):
     def update(self):
         super().update()
         self.control()
-        #self.check_collision()
+        self.check_collision()
         self.move()
 
     def move(self):

@@ -134,7 +134,7 @@ STACKED_SPRITE_ATTRS = {
         'path': 'assets/stacked_sprites/blue_tree.png',
         'num_layers': 43,
         'scale': 10,
-        'y_offset': -130,
+        'y_offset': -20,
         'transparency': True,
         'mask_layer': 3,
     },
