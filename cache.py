@@ -6,13 +6,14 @@ import gpurotate
 import numpy
 import pygame.pixelcopy
 import pickle
+import lzma
 
 finished_sprites = set()
 
 
 
 # https://github.com/pygame/pygame/issues/1244
-def make_surface_rgba(array):
+def make_surface_rgba(array, amask):
     """Returns a surface made from a [w, h, 4] numpy array with per-pixel alpha
     """
     shape = array.shape
@@ -29,7 +30,12 @@ def make_surface_rgba(array):
     # Copy the alpha part of array to the surface using a pixels-alpha
     # view of the surface.
     surface_alpha = numpy.array(surface.get_view('A'), copy=False)
-    surface_alpha[:,:] = array[:,:,3]
+    print(amask)
+    for i in amask:
+        for z in i:
+            if z != 255:
+                print(z)
+    surface_alpha[:,:] = amask
 
     return surface
 
@@ -87,54 +93,62 @@ class Cache:
                 'health': STACKED_SPRITE_ATTRS[obj_name]['health'] if 'health' in STACKED_SPRITE_ATTRS[obj_name] else None
             }
             attrs = STACKED_SPRITE_ATTRS[obj_name]
-            layer_array = self.get_layer_array(attrs)
-            self.run_prerender(obj_name, layer_array, attrs)
+            self.run_prerender(obj_name, attrs)
         while not len(STACKED_SPRITE_ATTRS) == len(finished_sprites):
             time.sleep(1)
 
     def get_all_rotated_slices(self, attrs, num_slices, viewing_angle, scale):
         return gpurotate.get_all_slices(attrs, num_slices, NUM_ANGLES, viewing_angle, scale)
 
-    #@threaded
-    def run_prerender(self, obj_name, layer_array, attrs):
+    @threaded
+    def run_prerender(self, obj_name, attrs):
         global finished_sprites
-        all_rotated_slices = self.get_all_rotated_slices(attrs, len(layer_array), self.viewing_angle, attrs['scale']) # cachegen line
-        
-        # ~ cachekey = "cache/%s" % (attrs['path'].split("/")[-1])
-        # ~ unscaled_images = [make_surface_rgba(x) for x in pickle.load(open(cachekey, 'rb'))]
-        # ~ self.stacked_sprite_cache[obj_name]['rotated_sprites'] = [pg.transform.flip(pg.transform.scale(x, vec2(x.get_size()) * attrs['scale']), False, False) for x in unscaled_images]
-        # ~ self.stacked_sprite_cache[obj_name]['collision_masks'] = [pg.mask.from_surface(self.stacked_sprite_cache[obj_name]['rotated_sprites'][angle]) for angle in range(len(self.stacked_sprite_cache[obj_name]['rotated_sprites']))]
-        
-        # ~ finished_sprites.add(obj_name)
-        # ~ return # todo delete below dead code
 
+        if True: # todo cache exists switch
+            with lzma.open('cache/%s' % (obj_name), 'r') as f:
+                pickle_data = pickle.load(f)
+            unscaled_images = pickle_data[0]
+            masks = pickle_data[1]
+            alphas = pickle_data[2]
+            unscaled_images = [make_surface_rgba(unscaled_images[i], alphas[i]) for i in range(len(unscaled_images))]
+            self.stacked_sprite_cache[obj_name]['rotated_sprites'] = [pg.transform.flip(pg.transform.scale(x, vec2(x.get_size()) * attrs['scale']/4.0), False, False) for x in unscaled_images]
+            self.stacked_sprite_cache[obj_name]['collision_masks'] = [pg.mask.from_surface(pg.surfarray.make_surface(x)) for x in masks]
+            finished_sprites.add(obj_name)
+            print("done w", obj_name)
+            return
+        layer_array = self.get_layer_array(attrs, ignore_scale=True)
+
+        all_angles = []
+        masks = []
+        alphas = []
         outline = attrs.get('outline', True)
         transparency = attrs.get('transparency', False)
         mask_layer = attrs.get('mask_layer', attrs['num_layers'] // 2)
-        all_rotated_slices = self.get_all_rotated_slices(attrs, len(layer_array), self.viewing_angle, attrs['scale']) # cachegen line
-
 
         for angle in range(NUM_ANGLES):
             print("rendering", angle, obj_name)
-            surf = make_surface_rgba(all_rotated_slices[angle * self.viewing_angle][0])
+            surf = pg.Surface(layer_array[0].get_size())
+            surf = pg.transform.rotate(surf, angle * self.viewing_angle)
             sprite_surf = pg.Surface([surf.get_width(), surf.get_height()
-                                      + attrs['num_layers'] * attrs['scale']]) # todo make this use renderer
+                                      + 4 * attrs['num_layers']],  flags=pygame.SRCALPHA)
             sprite_surf.fill('khaki')
             sprite_surf.set_colorkey('khaki')
-            for ind, layer in enumerate(layer_array): # todo no need for layer array here i believe, don't build it?
-                layer = make_surface_rgba(all_rotated_slices[angle * self.viewing_angle][ind]) # todo replace w lookup
-                sprite_surf.blit(layer, (0, ind * attrs['scale']))
+
+            for ind, layer in enumerate(layer_array):
+                layer = pg.transform.rotate(layer, angle * self.viewing_angle)
+                sprite_surf.blit(layer, (0, 4 * ind))
 
                 # get collision mask
                 if ind == mask_layer:
                     surf = pg.transform.flip(sprite_surf, True, True)
+                    masks.append(pg.surfarray.pixels3d(surf))
                     mask = pg.mask.from_surface(surf)
                     self.stacked_sprite_cache[obj_name]['collision_masks'][angle] = mask
 
-            # get outline
-            if outline:
-                outline_coords = pg.mask.from_surface(sprite_surf).outline()
-                pg.draw.polygon(sprite_surf, 'black', outline_coords, self.outline_thickness)
+            # ~ # get outline TODO do i want to re-enable this or nah
+            # ~ if outline:
+                # ~ outline_coords = pg.mask.from_surface(sprite_surf).outline()
+                # ~ pg.draw.polygon(sprite_surf, 'black', outline_coords, self.outline_thickness)
 
             # get alpha sprites
             if transparency:  #
@@ -143,23 +157,25 @@ class Cache:
                 alpha_sprite = pg.transform.flip(alpha_sprite, True, True)
                 self.stacked_sprite_cache[obj_name]['alpha_sprites'][angle] = alpha_sprite
 
-            image = pg.transform.flip(sprite_surf, True, True) # can we do something faster here
+            image = pg.transform.flip(sprite_surf, True, True)
+            all_angles.append(pg.surfarray.pixels3d(image))
+            surface_alpha = numpy.array(image.get_view('A'), copy=False)
+            alphas.append(surface_alpha)
+            image = pg.transform.scale(image, vec2(image.get_size()) * attrs['scale']/4.0)
+
             self.stacked_sprite_cache[obj_name]['rotated_sprites'][angle] = image
-            #pg.surfarray.pixels3d(image).tofile("cache/%s-%d" % (obj_name, angle))
-            
-
-
-
-
+        with lzma.open('cache/%s' % (obj_name), 'wb') as f:
+            pickle.dump([all_angles, masks, alphas], f)
         finished_sprites.add(obj_name)
 
 
-    def get_layer_array(self, attrs, keyword=lambda x : x['path']):
+    def get_layer_array(self, attrs, keyword=lambda x : x['path'], ignore_scale=False):
         # load sprite sheet
         sprite_sheet = pg.image.load(keyword(attrs)).convert_alpha()
         # scaling
+        scale = 4 if ignore_scale else attrs['scale']
         sprite_sheet = pg.transform.scale(sprite_sheet,
-                                          vec2(sprite_sheet.get_size()) * attrs['scale'])
+                                          vec2(sprite_sheet.get_size()) * scale)
         sheet_width = sprite_sheet.get_width()
         sheet_height = sprite_sheet.get_height()
         sprite_height = sheet_height // attrs['num_layers']
