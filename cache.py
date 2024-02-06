@@ -6,7 +6,7 @@ import gpurotate
 import numpy
 import pygame.pixelcopy
 import pickle
-import lzma
+import lzma, cv2
 
 finished_sprites = set()
 
@@ -30,11 +30,6 @@ def make_surface_rgba(array, amask):
     # Copy the alpha part of array to the surface using a pixels-alpha
     # view of the surface.
     surface_alpha = numpy.array(surface.get_view('A'), copy=False)
-    print(amask)
-    for i in amask:
-        for z in i:
-            if z != 255:
-                print(z)
     surface_alpha[:,:] = amask
 
     return surface
@@ -105,13 +100,14 @@ class Cache:
         global finished_sprites
 
         if True: # todo cache exists switch
+            print("started", obj_name)
             with lzma.open('cache/%s' % (obj_name), 'r') as f:
                 pickle_data = pickle.load(f)
             unscaled_images = pickle_data[0]
             masks = pickle_data[1]
             alphas = pickle_data[2]
             unscaled_images = [make_surface_rgba(unscaled_images[i], alphas[i]) for i in range(len(unscaled_images))]
-            self.stacked_sprite_cache[obj_name]['rotated_sprites'] = [pg.transform.flip(pg.transform.scale(x, vec2(x.get_size()) * attrs['scale']/4.0), False, False) for x in unscaled_images]
+            self.stacked_sprite_cache[obj_name]['rotated_sprites'] = [pg.transform.scale(x, vec2(x.get_size()) * attrs['scale']/4.0) for x in unscaled_images]
             self.stacked_sprite_cache[obj_name]['collision_masks'] = [pg.mask.from_surface(pg.surfarray.make_surface(x)) for x in masks]
             finished_sprites.add(obj_name)
             print("done w", obj_name)
@@ -140,7 +136,7 @@ class Cache:
 
                 # get collision mask
                 if ind == mask_layer:
-                    surf = pg.transform.flip(sprite_surf, True, True)
+                    surf = pg.transform.flip(sprite_surf, True, True).convert_alpha() # todo handle collision scaling, check masks identical
                     masks.append(pg.surfarray.pixels3d(surf))
                     mask = pg.mask.from_surface(surf)
                     self.stacked_sprite_cache[obj_name]['collision_masks'][angle] = mask
@@ -157,13 +153,16 @@ class Cache:
                 alpha_sprite = pg.transform.flip(alpha_sprite, True, True)
                 self.stacked_sprite_cache[obj_name]['alpha_sprites'][angle] = alpha_sprite
 
-            image = pg.transform.flip(sprite_surf, True, True)
+            image = pg.transform.flip(sprite_surf, True, True).convert_alpha()
             all_angles.append(pg.surfarray.pixels3d(image))
             surface_alpha = numpy.array(image.get_view('A'), copy=False)
             alphas.append(surface_alpha)
+            
             image = pg.transform.scale(image, vec2(image.get_size()) * attrs['scale']/4.0)
 
             self.stacked_sprite_cache[obj_name]['rotated_sprites'][angle] = image
+            
+
         with lzma.open('cache/%s' % (obj_name), 'wb') as f:
             pickle.dump([all_angles, masks, alphas], f)
         finished_sprites.add(obj_name)
