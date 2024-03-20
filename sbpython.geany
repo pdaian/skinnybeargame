@@ -28,30 +28,30 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=18
-FILE_NAME_0=1769;Python;0;EUTF-8;0;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Ccache.py;0;4
+current_page=0
+FILE_NAME_0=5630;Python;0;EUTF-8;0;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Ccache.py;0;4
 FILE_NAME_1=3848;Python;0;EUTF-8;0;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cgpurotate.py;0;4
 FILE_NAME_2=1857;Python;0;EUTF-8;0;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cbullet.py;0;4
-FILE_NAME_3=1370;Python;0;EUTF-8;0;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cstacked_sprite.py;0;4
+FILE_NAME_3=1037;Python;0;EUTF-8;0;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cstacked_sprite.py;0;4
 FILE_NAME_4=531;Python;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cmapreplace.py;0;4
-FILE_NAME_5=2104;None;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cpinehilldowntown_partial.csv;0;4
+FILE_NAME_5=622;None;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cpinehilldowntown_partial.csv;0;4
 FILE_NAME_6=3195;None;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cpinehilldowntown_partial_parsed.csv;0;4
 FILE_NAME_7=3920;Python;0;EUTF-8;0;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cscene.py;0;4
 FILE_NAME_8=591;None;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Ccredits;0;4
 FILE_NAME_9=178;Python;0;EUTF-8;0;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cenemies.py;0;4
 FILE_NAME_10=269;Python;0;EUTF-8;0;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Capp.py;0;4
-FILE_NAME_11=2669;Python;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Csettings.py;0;4
+FILE_NAME_11=2712;Python;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Csettings.py;0;4
 FILE_NAME_12=229;Python;0;EUTF-8;0;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cmain.py;0;4
 FILE_NAME_13=30574;Python;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ccule%5CAppData%5CLocal%5CPackages%5CPythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0%5CLocalCache%5Clocal-packages%5CPython312%5Csite-packages%5Cpygame%5Csprite.py;0;4
 FILE_NAME_14=3096;Python;0;EUTF-8;0;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cplayer.py;0;4
 FILE_NAME_15=84;None;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Cnotestodos;0;4
-FILE_NAME_16=998;Python;0;EUTF-8;0;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Centity.py;0;4
+FILE_NAME_16=1770;Python;0;EUTF-8;0;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython%5Centity.py;0;4
 FILE_NAME_17=2728;None;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython-cpu%5Cpinehilldowntown_partial_parsed.csv;0;4
 FILE_NAME_18=3298;Python;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ccule%5CDocuments%5Csbpython-cpu%5Ccache.py;0;4
 
 [build-menu]
 EX_00_LB=_Execute
-EX_00_CM=python3 "main.py" 1
+EX_00_CM=python3 "main.py" 360
 EX_00_WD=
 PythonFT_00_LB=_Compile
 PythonFT_00_CM=python3 -m compileall .

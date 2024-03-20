@@ -7,6 +7,7 @@ import numpy
 import pygame.pixelcopy
 import pickle
 import lzma, cv2
+import threading
 
 finished_sprites = set()
 
@@ -16,6 +17,12 @@ def make_surface_rgba(image):
 
 class Cache:
     def __init__(self):
+        # keep track of when threads are done
+        self.load_lock = threading.Lock()
+        self.item_locks = {}
+        self.thread_started_count = {}
+        self.thread_finished_count = {}
+
         load = time.time()
         self.stacked_sprite_cache = {}
         self.entity_sprite_cache = {}
@@ -25,6 +32,7 @@ class Cache:
         self.get_stacked_sprite_cache()
         self.get_entity_sprite_cache()
         print("loaded cache in", time.time() - load)
+
 
     def get_entity_sprite_cache(self):
         for sprite_name in ENTITY_SPRITE_ATTRS:
@@ -72,24 +80,57 @@ class Cache:
 
     def get_all_rotated_slices(self, attrs, num_slices, viewing_angle, scale):
         return gpurotate.get_all_slices(attrs, num_slices, NUM_ANGLES, viewing_angle, scale)
+        
+    @threaded
+    def load_chunk_from_cache(self, obj_name, chunk_num, attrs):
+        chunk_size = NUM_ANGLES / 10
+        start_index = chunk_num * chunk_size
+        end_index = (chunk_num+1)*chunk_size
+        with lzma.open('cache/%s-%d' % (obj_name, chunk_num), 'r') as f:
+            pickle_data = pickle.load(f)
+        unscaled_images = pickle_data[0]
+        masks = pickle_data[1]
+        unscaled_images = [make_surface_rgba(unscaled_images[i]) for i in range(len(unscaled_images))]
+        masks = [make_surface_rgba(x) for x in masks]
+        rotated_slices = [pg.transform.scale(x, vec2(x.get_size()) * attrs['scale']/4.0).convert_alpha() for x in unscaled_images]
+        rotated_masks = [pg.mask.from_surface(pg.transform.scale(x, vec2(x.get_size()) * attrs['scale']/4.0)) for x in masks]
+        # todo can we use a faster array copy here
+        self.item_locks[obj_name].acquire()
+        self.stacked_sprite_cache[obj_name]['rotated_sprites'][start_index:end_index] = rotated_slices
+        self.stacked_sprite_cache[obj_name]['collision_masks'][start_index:end_index] = rotated_masks
+        if not obj_name in self.thread_finished_count:
+            self.thread_finished_count[obj_name] = 1
+        else:
+            self.thread_finished_count[obj_name] += 1
+        self.item_locks[obj_name].release()
+        print("done w", obj_name, chunk_num)
+        
+    def chunks(self, lst, n):
+        """Yield successive n-sized chunks from lst."""
+        for i in range(0, len(lst), n):
+            yield lst[i:i + n]
 
+    
     @threaded
     def run_prerender(self, obj_name, attrs):
         global finished_sprites
 
-        if os.path.exists('cache/%s' % (obj_name)):
-            # todo cache fail to load logic
+        if os.path.exists('cache/%s-0' % (obj_name)):
+            # todo cache fail to load logic, deal w some missing chunks not others
+            # (perhaps separate out initial render function for cleanliness)
             print("started", obj_name)
-            with lzma.open('cache/%s' % (obj_name), 'r') as f:
-                pickle_data = pickle.load(f)
-            unscaled_images = pickle_data[0]
-            masks = pickle_data[1]
-            unscaled_images = [make_surface_rgba(unscaled_images[i]) for i in range(len(unscaled_images))]
-            self.stacked_sprite_cache[obj_name]['rotated_sprites'] = [pg.transform.scale(x, vec2(x.get_size()) * attrs['scale']/4.0).convert_alpha() for x in unscaled_images]
-            masks = [make_surface_rgba(x) for x in masks]            
-            self.stacked_sprite_cache[obj_name]['collision_masks'] = [pg.mask.from_surface(pg.transform.scale(x, vec2(x.get_size()) * attrs['scale']/4.0)) for x in masks]
+            self.item_locks[obj_name] = threading.Lock()
+            self.thread_started_count[obj_name] = 10
+            for i in range(10):
+                self.load_chunk_from_cache(obj_name, i, attrs)
+            while not obj_name in self.thread_finished_count or self.thread_started_count[obj_name] != self.thread_finished_count[obj_name]:
+                # wait until all child execution threads wrap up
+                if obj_name in self.thread_finished_count:
+                    print("[LOADING THREADS]", obj_name, self.thread_finished_count[obj_name], "of", self.thread_started_count[obj_name])
+                time.sleep(.5)
+            self.load_lock.acquire()
             finished_sprites.add(obj_name)
-            print("done w", obj_name)
+            self.load_lock.release()
             return
         layer_array = self.get_layer_array(attrs, ignore_scale=True)
 
@@ -139,10 +180,16 @@ class Cache:
             image = pg.transform.scale(image, vec2(image.get_size()) * attrs['scale']/4.0)
             self.stacked_sprite_cache[obj_name]['rotated_sprites'][angle] = image
 
-        with lzma.open('cache/%s' % (obj_name), 'wb') as f:
-            pickle.dump([all_angles, masks], f)
-        finished_sprites.add(obj_name) # this is unsafe replace w progress
-
+        # todo this can be made a lot faster if u care
+        # todo customizable / experiment with num chunks
+        split_angles = self.chunks(all_angles, NUM_ANGLES/10)
+        split_masks = self.chunks(masks, NUM_ANGLES/10)
+        for chunk in range(0, 10):
+            with lzma.open('cache/%s-%d' % (obj_name, chunk), 'wb') as f:
+                pickle.dump([next(split_angles), next(split_masks)], f)
+        self.load_lock.acquire()
+        finished_sprites.add(obj_name)
+        self.load_lock.release()
 
     def get_layer_array(self, attrs, keyword=lambda x : x['path'], ignore_scale=False):
         # load sprite sheet
