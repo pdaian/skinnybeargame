@@ -80,10 +80,10 @@ class Cache:
 
     def get_all_rotated_slices(self, attrs, num_slices, viewing_angle, scale):
         return gpurotate.get_all_slices(attrs, num_slices, NUM_ANGLES, viewing_angle, scale)
-        
+
     @threaded
     def load_chunk_from_cache(self, obj_name, chunk_num, attrs):
-        chunk_size = NUM_ANGLES / 10
+        chunk_size = NUM_ANGLES // 10
         start_index = chunk_num * chunk_size
         end_index = (chunk_num+1)*chunk_size
         with lzma.open('cache/%s-%d' % (obj_name, chunk_num), 'r') as f:
@@ -96,21 +96,22 @@ class Cache:
         rotated_masks = [pg.mask.from_surface(pg.transform.scale(x, vec2(x.get_size()) * attrs['scale']/4.0)) for x in masks]
         # todo can we use a faster array copy here
         self.item_locks[obj_name].acquire()
-        self.stacked_sprite_cache[obj_name]['rotated_sprites'][start_index:end_index] = rotated_slices
-        self.stacked_sprite_cache[obj_name]['collision_masks'][start_index:end_index] = rotated_masks
+        for offset in range(len(rotated_slices)):
+            self.stacked_sprite_cache[obj_name]['rotated_sprites'][start_index+offset] = rotated_slices[offset]
+            self.stacked_sprite_cache[obj_name]['collision_masks'][start_index+offset] = rotated_masks[offset]
         if not obj_name in self.thread_finished_count:
             self.thread_finished_count[obj_name] = 1
         else:
             self.thread_finished_count[obj_name] += 1
         self.item_locks[obj_name].release()
         print("done w", obj_name, chunk_num)
-        
+
     def chunks(self, lst, n):
         """Yield successive n-sized chunks from lst."""
         for i in range(0, len(lst), n):
             yield lst[i:i + n]
 
-    
+
     @threaded
     def run_prerender(self, obj_name, attrs):
         global finished_sprites
@@ -182,8 +183,8 @@ class Cache:
 
         # todo this can be made a lot faster if u care
         # todo customizable / experiment with num chunks
-        split_angles = self.chunks(all_angles, NUM_ANGLES/10)
-        split_masks = self.chunks(masks, NUM_ANGLES/10)
+        split_angles = self.chunks(all_angles, int(NUM_ANGLES/10))
+        split_masks = self.chunks(masks, int(NUM_ANGLES/10))
         for chunk in range(0, 10):
             with lzma.open('cache/%s-%d' % (obj_name, chunk), 'wb') as f:
                 pickle.dump([next(split_angles), next(split_masks)], f)

@@ -83,7 +83,21 @@ and is also cached for all angles of the object, set manually or by default
 equal to num_layer // 2'''
 
 STACKED_SPRITE_ATTRS = {
-     'wellington': {
+    'blacktop': {
+        'num_layers': 1,
+        'scale': 6.2,
+        'path': 'assets/entities/level1/town/blacktop.png',
+        'y_offset': 50,
+        'outline': False,
+   },
+   'gravel': {
+        'num_layers': 1,
+        'scale': 6.4,
+        'path': 'assets/entities/level1/town/gravel.png',
+        'y_offset': 0,
+        'outline': False,
+   },
+   'wellington': {
         'path': 'assets/entities/level1/town/wellington.png',
         'num_layers': 35,
         'mask_layer': 31,
@@ -100,20 +114,6 @@ STACKED_SPRITE_ATTRS = {
         'y_offset': 0,
         'mask_layer': 4,
     },
-    'blacktop': {
-        'num_layers': 1,
-        'scale': 6.2,
-        'path': 'assets/entities/level1/town/blacktop.png',
-        'y_offset': 50,
-        'outline': False,
-   },
-   'gravel': {
-        'num_layers': 1,
-        'scale': 6.4,
-        'path': 'assets/entities/level1/town/gravel.png',
-        'y_offset': 0,
-        'outline': False,
-   },
     'pancake': {
         'path': 'assets/stacked_sprites/pancake.png',
         'num_layers': 11,

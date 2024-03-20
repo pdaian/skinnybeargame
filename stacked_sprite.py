@@ -26,7 +26,6 @@ class StackedSprite(pg.sprite.Sprite):
         self.screen_pos = vec2(0)
         self.rot = (rot % 360) // self.viewing_angle
 
-        print(len(self.rotated_sprites), self.rotated_sprites)
         self.rect = self.rotated_sprites[self.angle].get_rect()
         
         # upload all computed surfaces into gpu memory
