@@ -40,6 +40,10 @@ class App:
         self.renderer.clear()
         self.renderer.draw_color = (107, 142, 35, 255)
         self.main_group.draw(self.renderer)
+        font = pg.font.Font("assets/fonts/yarn.ttf", size=100)
+        text = font.render("Yarn: %3d%%" % (self.player.health), 1, (222,20,20)) # Arguments are: text, anti-aliasing, color
+        text_image = Image(Texture.from_surface(self.renderer, text), srcrect=(WIDTH-500, 10))
+        text_image.draw()
         self.renderer.present()
         self.window.title = str(f"FPS: {self.clock.get_fps()}")
         return # todo clean below reprod health display eol screen

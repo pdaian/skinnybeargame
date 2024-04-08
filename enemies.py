@@ -62,7 +62,9 @@ def run_enemy_loop(enemy_spawners, app):
             if distance_away < enemy.follow_within:
                 enemy.following = True
             if enemy.following:
-                normalized_vector = vector_to / distance_away
+                normalized_vector = vector_to
+                if distance_away != 0:
+                    normalized_vector /= distance_away
                 print("setting velocity to", normalized_vector)
                 enemy.velocity = normalized_vector
 
