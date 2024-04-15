@@ -3,7 +3,7 @@ from settings import *
 from cache import Cache
 from player import Player
 from scene import Scene
-from pygame._sdl2 import Window, Renderer
+from pygame._sdl2 import Window, Renderer, Image, Texture
 
 class App:
     def __init__(self, cache=None):
@@ -42,8 +42,8 @@ class App:
         self.main_group.draw(self.renderer)
         font = pg.font.Font("assets/fonts/yarn.ttf", size=100)
         text = font.render("Yarn: %3d%%" % (self.player.health), 1, (222,20,20)) # Arguments are: text, anti-aliasing, color
-        text_image = Image(Texture.from_surface(self.renderer, text), srcrect=(WIDTH-500, 10))
-        text_image.draw()
+       # text_image = Image(Texture.from_surface(self.renderer, text), srcrect=(WIDTH-500, 10))
+        #text_image.draw()
         self.renderer.present()
         self.window.title = str(f"FPS: {self.clock.get_fps()}")
         return # todo clean below reprod health display eol screen
