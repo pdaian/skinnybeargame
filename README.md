@@ -6,3 +6,4 @@ rotate world: LEFT, RIGHT
 shooting: UP
 
 ![spritestacking](/screenshot/0.jpg)
+"# skinnybeargame" 

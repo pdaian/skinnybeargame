@@ -4,10 +4,15 @@ from cache import Cache
 from player import Player
 from scene import Scene
 import time
+from pygame._sdl2 import Window, Renderer, Image, Texture
 
 class App:
     def __init__(self, cache=None):
+        self.done = False
+        pg.display.init()
         self.screen = pg.display.set_mode(RES)
+        self.window = Window("sb and the power of <3", resizable=True)
+        self.renderer = Renderer(self.window)
         self.clock = pg.time.Clock()
         self.time = 0
         self.delta_time = 0.01
@@ -24,7 +29,6 @@ class App:
             self.cache = Cache()
         self.player = Player(self)
         self.scene = Scene(self)
-        self.done = False
         self.start = time.time()
         self.end = 0
 
@@ -36,8 +40,18 @@ class App:
 
     def draw(self):
         # render scene tree
+        self.renderer.clear()
+        self.renderer.draw_color = (107, 142, 35, 255)
+        self.main_group.draw(self.renderer)
+        font = pg.font.Font("assets/fonts/yarn.ttf", size=100)
+        text = font.render("Yarn: %3d%%" % (self.player.health), 1, (222,20,20)) # Arguments are: text, anti-aliasing, color
+       # text_image = Image(Texture.from_surface(self.renderer, text), srcrect=(WIDTH-500, 10))
+        #text_image.draw()
+        self.renderer.present()
+        self.window.title = str(f"FPS: {self.clock.get_fps()}")
+        return # todo clean below reprod health display eol screen
         if self.player.health > 0:
-            self.screen.fill(BG_COLOR)
+            renderer.draw_color = (107, 142, 35, 255)
             self.main_group.draw(self.screen)
             background_rect = pg.Surface((550,150))  # the size of your rect
             background_rect.set_alpha(200)                # alpha level
@@ -73,7 +87,7 @@ class App:
         for e in pg.event.get():
             if e.type == pg.QUIT or (e.type == pg.KEYDOWN and e.key == pg.K_ESCAPE):
                 self.done = True
-                #pg.quit()
+                pg.quit()
                 #sys.exit()
             elif e.type == self.anim_event:
                 self.anim_trigger = True

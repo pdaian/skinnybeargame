@@ -1,6 +1,6 @@
 from settings import *
 import math
-
+from pygame._sdl2 import Texture, Image
 
 class StackedSprite(pg.sprite.Sprite):
     def __init__(self, app, name, pos, rot=0, collision=True):
@@ -27,14 +27,21 @@ class StackedSprite(pg.sprite.Sprite):
         print(rot, self.viewing_angle)
         self.rot = (rot % 360) // self.viewing_angle
 
+        self.rect = self.rotated_sprites[self.angle].get_rect()
+        
+        # upload all computed surfaces into gpu memory
+        # todo optimize this by doing surface computations in-gpu
+        for angle in range(len(self.rotated_sprites)):
+            if not isinstance(self.rotated_sprites[angle], Image):
+                self.rotated_sprites[angle] = Image(Texture.from_surface(self.app.renderer, self.rotated_sprites[angle]), srcrect=self.rotated_sprites[angle].get_rect())
+
         self.image = self.rotated_sprites[self.angle]
         self.mask = self.collision_masks[self.angle]
-        self.rect = self.image.get_rect()
         self.deferred_updates = 0
         self.does_damage = False
+        self.origin = self.pos
 
     def change_layer(self):
-        #print("changing layer to ", self.name, self.screen_pos.y)
         offset = 0
         if self.name in OFFSETS_ENABLED:
             offset = OFFSETS[self.name]
@@ -47,6 +54,8 @@ class StackedSprite(pg.sprite.Sprite):
         pos = self.pos - self.player.offset
         pos = pos.rotate_rad(self.player.angle)
         self.screen_pos = pos + CENTER
+        self.rect.center = self.screen_pos + self.y_offset
+
 
     def get_angle(self):
         self.angle = -math.degrees(self.player.angle) // self.viewing_angle + self.rot
@@ -57,6 +66,7 @@ class StackedSprite(pg.sprite.Sprite):
         self.transform()
         self.get_angle()
         self.get_image()
+
         if (self.deferred_updates % 50 == 0):
             self.change_layer()
             self.deferred_updates = 0

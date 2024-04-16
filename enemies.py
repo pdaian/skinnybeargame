@@ -1,21 +1,8 @@
-from threading import Thread
 from entity import Entity
 from settings import TILE_SIZE
 from pygame import math as pgm
+from threadutils import threaded
 
-def threaded(func):
-    """
-    Decorator that multithreads the target function
-    with the given parameters. Returns the thread
-    created for the function
-    """
-    def wrapper(*args, **kwargs):
-        thread = Thread(target=func, args=args)
-        thread.start()
-        return thread
-    return wrapper
-
-# credit https://gist.githubusercontent.com/raviolliii/94e9e16ef74f3c4f0886c6eb1fdfa157/raw/b32018243349061aac2776b25c957045ea298d07/thread_decorator.py
 @threaded
 def run_enemy_loop(enemy_spawners, app):
     import time
@@ -26,7 +13,7 @@ def run_enemy_loop(enemy_spawners, app):
             # either spawn after one full cycle or instantly depending on settings
             enemy_spawner.last_updated -= enemy_spawner.spawn_every
         enemy_spawner.enemies_spawned = []
-    print(enemy_spawners)
+    print("spawners", enemy_spawners)
     while not app.done:
         # cleanup any newly dead enemies
         startcleanup = time.time()
@@ -75,7 +62,9 @@ def run_enemy_loop(enemy_spawners, app):
             if distance_away < enemy.follow_within:
                 enemy.following = True
             if enemy.following:
-                normalized_vector = vector_to / distance_away
+                normalized_vector = vector_to
+                if distance_away != 0:
+                    normalized_vector /= distance_away
                 print("setting velocity to", normalized_vector)
                 enemy.velocity = normalized_vector * enemy.follow_speed
 
