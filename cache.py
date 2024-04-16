@@ -86,7 +86,7 @@ class Cache:
         chunk_size = NUM_ANGLES // 10
         start_index = chunk_num * chunk_size
         end_index = (chunk_num+1)*chunk_size
-        with lzma.open('cache/%s-%d' % (obj_name, chunk_num), 'r') as f:
+        with lzma.open('cache/%d/%s-%d' % (NUM_ANGLES, obj_name, chunk_num), 'r') as f:
             pickle_data = pickle.load(f)
         unscaled_images = pickle_data[0]
         masks = pickle_data[1]
@@ -116,7 +116,7 @@ class Cache:
     def run_prerender(self, obj_name, attrs):
         global finished_sprites
 
-        if os.path.exists('cache/%s-0' % (obj_name)):
+        if os.path.exists('cache/%d/%s-0' % (NUM_ANGLES, obj_name)):
             # todo cache fail to load logic, deal w some missing chunks not others
             # (perhaps separate out initial render function for cleanliness)
             print("started", obj_name)
@@ -185,8 +185,9 @@ class Cache:
         # todo customizable / experiment with num chunks
         split_angles = self.chunks(all_angles, int(NUM_ANGLES/10))
         split_masks = self.chunks(masks, int(NUM_ANGLES/10))
+        os.makedirs("cache/%d" % (NUM_ANGLES), exist_ok=True)
         for chunk in range(0, 10):
-            with lzma.open('cache/%s-%d' % (obj_name, chunk), 'wb') as f:
+            with lzma.open('cache/%d/%s-%d' % (NUM_ANGLES, obj_name, chunk), 'wb') as f:
                 pickle.dump([next(split_angles), next(split_masks)], f)
         self.load_lock.acquire()
         finished_sprites.add(obj_name)

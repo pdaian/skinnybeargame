@@ -1,4 +1,4 @@
-import importlib, sys, numpy # import here to avoid reload
+import importlib, sys, numpy, gc # import here to avoid reload
 
 
 # https://stackoverflow.com/questions/45405600/how-to-reload-all-imported-modules
@@ -23,6 +23,7 @@ def reload() :
             # there are some problems that are swept under the rug here
             pass
 
+gc.enable()
 init()
 import app, cache
 
@@ -30,6 +31,7 @@ if __name__ == '__main__':
     print("App1")
     myapp = app.App()
     mycache = myapp.cache
+    gc.collect()
     myapp.run()
     print("XIT")
     while True:

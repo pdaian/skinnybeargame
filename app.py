@@ -38,48 +38,41 @@ class App:
         pg.display.set_caption(f'{self.clock.get_fps(): .1f}')
         self.delta_time = self.clock.tick()
 
+    def draw_text(self, text, dstrect):
+        text_image = Image(Texture.from_surface(self.renderer, text))
+        text_image.draw(dstrect=dstrect)
+        
+
     def draw(self):
         # render scene tree
         self.renderer.clear()
-        self.renderer.draw_color = (107, 142, 35, 255)
-        self.main_group.draw(self.renderer)
-        font = pg.font.Font("assets/fonts/yarn.ttf", size=100)
-        text = font.render("Yarn: %3d%%" % (self.player.health), 1, (222,20,20)) # Arguments are: text, anti-aliasing, color
-       # text_image = Image(Texture.from_surface(self.renderer, text), srcrect=(WIDTH-500, 10))
-        #text_image.draw()
-        self.renderer.present()
-        self.window.title = str(f"FPS: {self.clock.get_fps()}")
-        return # todo clean below reprod health display eol screen
         if self.player.health > 0:
-            renderer.draw_color = (107, 142, 35, 255)
-            self.main_group.draw(self.screen)
-            background_rect = pg.Surface((550,150))  # the size of your rect
-            background_rect.set_alpha(200)                # alpha level
-            background_rect.fill((64,48,27))           # this fills the entire surface
-            self.screen.blit(background_rect, (WIDTH-550, 0))
+            self.renderer.draw_color = (107, 142, 35, 255)
+            self.main_group.draw(self.renderer)
             font = pg.font.Font("assets/fonts/yarn.ttf", size=100)
             text = font.render("Yarn: %3d%%" % (self.player.health), 1, (222,20,20)) # Arguments are: text, anti-aliasing, color
-            self.screen.blit(text, (WIDTH-500, 10))
-            pg.display.flip()
+            text_image = Image(Texture.from_surface(self.renderer, text))
+            self.draw_text(text, (WIDTH-500, 10))
         else:
             if self.end == 0:
                 self.end = time.time()
             #self.done = True
-            self.screen.fill((64,48,27))
+            self.renderer.draw_color = (64,48,27, 255)
             font = pg.font.Font("assets/fonts/yarn.ttf", size=100)
             text = font.render("skinny bear has run out of yarn", 1, (222,20,20)) # Arguments are: text, anti-aliasing, color
-            self.screen.blit(text, (200, H_HEIGHT-300))
+            self.draw_text(text, (200, H_HEIGHT-300))
             text = font.render("this kills the bear :(", 1, (222,20,20)) # Arguments are: text, anti-aliasing, color
-            self.screen.blit(text, (200, H_HEIGHT-200))
+            self.draw_text(text, (200, H_HEIGHT-200))
             text = font.render("SPACE - restart esc - give up", 1, (222,20,20)) # Arguments are: text, anti-aliasing, color
-            self.screen.blit(text, (200, H_HEIGHT+100))
+            self.draw_text(text, (200, H_HEIGHT+100))
             high_score = int(open('hs').read().strip())
             score = int(self.end - self.start)
             if score > high_score:
                 open('hs', 'w').write(str(score))
             text = font.render("score: %d highest ever score: %d" % (score, high_score), 1, (222,20,20)) # Arguments are: text, anti-aliasing, color
-            self.screen.blit(text, (200, H_HEIGHT+200))
-            pg.display.flip()
+            self.draw_text(text, (200, H_HEIGHT+200))
+        self.renderer.present()
+        self.window.title = str(f"FPS: {self.clock.get_fps()}")
 
 
     def check_events(self):
@@ -107,4 +100,4 @@ class App:
             self.get_time()
             self.update()
             self.draw()
-
+            # todo exception handle these calls gracefully

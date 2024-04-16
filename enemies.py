@@ -6,6 +6,7 @@ from threadutils import threaded
 @threaded
 def run_enemy_loop(enemy_spawners, app):
     import time
+    time.sleep(10)
     enemies = []
     for enemy_spawner in enemy_spawners:
         enemy_spawner.last_updated = time.time()

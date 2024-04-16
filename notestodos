@@ -4,6 +4,7 @@ music level hearts shooting at harp/piano in sine wave for caroling
 next
 -----
 
+- fix pigeon bug
 - single window display, esc restart works
 - health/score/death loop parity, including esc / space controls and on screen elements
 - alpha loading
