@@ -9,20 +9,23 @@ RES = WIDTH, HEIGHT = vec2(1920, 1080)
 #RES = WIDTH, HEIGHT = vec2(3440, 1440) # just for fun lol
 
 CENTER = H_WIDTH, H_HEIGHT = RES // 2
-TILE_SIZE = 200  #
+TILE_SIZE = 200
 
 PLAYER_SPEED = 0.4
 PLAYER_ROT_SPEED = 0.001
 
-BG_COLOR = 'olivedrab'  #
-NUM_ANGLES = 1  # multiple of 360 -> 24, 30, 36, 40, 45, 60, 72, 90, 120, 180
+NUM_ANGLES = 10  # divisor of 360, multiple of 10, todo support other increments (eg 1)
+
+
 if len(sys.argv) > 1:
 	NUM_ANGLES = int(sys.argv[1])
 	if len(sys.argv) > 2:
 		RES = WIDTH, HEIGHT = vec2(3440, 1440) # fullscreen
 
+
 OFFSETS = {'blacktop': -1, 'gravel': 5000}
 OFFSETS_ENABLED = set(OFFSETS.keys())
+
 
 # entity settings
 ENTITY_SPRITE_ATTRS = {
@@ -172,21 +175,3 @@ STACKED_SPRITE_ATTRS = {
         'health': 50,
     },
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

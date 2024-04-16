@@ -36,7 +36,6 @@ if __name__ == '__main__':
     print("XIT")
     while True:
         print("LOOP")
-        
         reload()
         myapp = app.App(cache=mycache)
         myapp.run()

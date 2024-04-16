@@ -1,9 +1,3 @@
-# SpriteStacking
-Sprite Stacking Graphics Engine with Python and Pygame
+# sb and the power of <3
 
-control: W, A, S, D, 
-rotate world: LEFT, RIGHT
-shooting: UP
-
-![spritestacking](/screenshot/0.jpg)
-"# skinnybeargame" 
+see CREDITS and LICENSE for more information on the assets in this repo
