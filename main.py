@@ -1,12 +1,10 @@
-import importlib, sys, numpy, gc # import here to avoid reload
+import gc # import here to avoid reload
 
 
 # https://stackoverflow.com/questions/45405600/how-to-reload-all-imported-modules
 def init() :
     # local imports to keep things neat
     from sys import modules
-    import importlib
-
     global PRELOADED_MODULES
 
     # sys and importlib are ignored here too
@@ -25,7 +23,7 @@ def reload() :
 
 gc.enable()
 init()
-import app, cache
+import app
 
 if __name__ == '__main__':
     print("App1")

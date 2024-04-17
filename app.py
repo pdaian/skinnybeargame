@@ -1,4 +1,3 @@
-import sys
 from settings import *
 from cache import Cache
 from player import Player

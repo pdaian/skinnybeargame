@@ -14,7 +14,7 @@ TILE_SIZE = 200
 PLAYER_SPEED = 0.4
 PLAYER_ROT_SPEED = 0.001
 
-NUM_ANGLES = 10  # divisor of 360, multiple of 10, todo support other increments (eg 1)
+NUM_ANGLES = 360  # divisor of 360, multiple of 10, todo support other increments (eg 1)
 
 
 if len(sys.argv) > 1:

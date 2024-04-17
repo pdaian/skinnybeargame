@@ -1,12 +1,9 @@
 from settings import *
 from threadutils import threaded
 import time, os
-from pygame._sdl2 import Texture, Image
-import gpurotate
-import numpy
 import pygame.pixelcopy
 import pickle
-import lzma, cv2
+import lzma
 import threading
 
 finished_sprites = set()
@@ -77,9 +74,6 @@ class Cache:
             self.run_prerender(obj_name, attrs)
         while not len(STACKED_SPRITE_ATTRS) == len(finished_sprites):
             time.sleep(1)
-
-    def get_all_rotated_slices(self, attrs, num_slices, viewing_angle, scale):
-        return gpurotate.get_all_slices(attrs, num_slices, NUM_ANGLES, viewing_angle, scale)
 
     @threaded
     def load_chunk_from_cache(self, obj_name, chunk_num, attrs):
