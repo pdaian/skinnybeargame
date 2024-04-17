@@ -45,9 +45,9 @@ ENTITY_SPRITE_ATTRS = {
         'y_offset': -20,
     },
     'explosion': {
-        'num_layers': 10,
-        'scale': .5,
-        'path': 'assets/entities/level1/redexplosion1.png',
+        'num_layers': 7,
+        'scale': 1.0,
+        'path': 'assets/entities/explosion/explosion.png',
         'y_offset': 50, 
         'reverse': True
     },

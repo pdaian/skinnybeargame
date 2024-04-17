@@ -42,11 +42,13 @@ def run_enemy_loop(enemy_spawners, app):
                 #    if enemy_spawner.enemies_spawned[-1].health > 0:
                 #        print("declining to spawn; enemy exists with health")
                 #        continue # nothing further to do at this spawner
+                app.render_lock.acquire()
                 enemy = Entity(app, name=enemy_spawner.spawn_name, pos=enemy_spawner.pos/TILE_SIZE, collision=True)
                 enemy.follow_speed = enemy_spawner.follow_speed
                 enemy.follow_within = enemy_spawner.follow_within
                 enemy.does_damage = enemy_spawner.does_damage
                 enemy.following = False
+                app.render_lock.release()
                 print("spawning done", enemy.pos)
                 enemy_spawner.enemies_spawned.append(enemy)
                 enemies.append(enemy)

@@ -2,32 +2,17 @@ from stacked_sprite import *
 from random import uniform
 from entity import Entity
 import enemies
+import suave
 
-P = 'player'
-K = 'kitty'  # entity
-A, B, C, D, E, F, G, H = 'van', 'tank', 'blue_tree', 'car', 'grass', 'crate', 'cup', 'pancake'
-S = 'sphere' # transform object
-
-SCENE = [
-    [0, E, 0, E, B, 0, E, 0, 0, E, 0, E, 0, E],
-    [E, C, C, C, 0, C, C, 0, E, 0, C, C, C, 0],
-    [0, C, 0, 0, 0, 0, E, C, 0, C, 0, H, K, C],
-    [C, 0, 0, E, C, 0, 0, C, C, 0, 0, 0, 0, C],
-    [C, E, 0, 0, P, E, 0, E, 0, 0, F, E, 0, C],
-    [C, 0, 0, A, E, D, E, S, 0, F, 0, 0, C, 0],
-    [0, C, E, 0, 0, 0, E, 0, E, 0, 0, B, C, E],
-    [0, C, C, 0, E, 0, C, C, 0, G, E, C, 0, 0],
-    [E, 0, 0, C, C, C, C, 0, C, C, C, 0, E, 0],
-]
 
 # this hacky janky and slow as fuck replace it
-MAP = open("pinehilldowntown_partial_parsed.csv").read().splitlines()
+SUAVE = suave.SUAVE()
+MAP = SUAVE.get_world().splitlines()
 MAP = [x[:-1].split(",") for x in MAP]
 for rowindex in range(len(MAP)):
     for columnindex in range(len(MAP[rowindex])):
         if MAP[rowindex][columnindex] == "-1":
              MAP[rowindex][columnindex] = 0
-
 MAP_SIZE = MAP_WIDTH, MAP_HEIGHT = vec2(len(MAP), len(MAP[0]))
 MAP_CENTER = MAP_SIZE / 2
 print(MAP)
@@ -42,6 +27,7 @@ class Scene:
         enemies.run_enemy_loop(self.enemy_spawners, app)
 
     def load_scene(self):
+        self.app.SUAVE = SUAVE
         rand_rot = lambda: uniform(0, 360)
         rand_pos = lambda pos: pos + vec2(uniform(-0.25, 0.25))
 

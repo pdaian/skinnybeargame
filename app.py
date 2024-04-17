@@ -5,6 +5,7 @@ from player import Player
 from scene import Scene
 import time
 from pygame._sdl2 import Window, Renderer, Image, Texture
+import threading
 
 class App:
     def __init__(self, cache=None):
@@ -31,9 +32,11 @@ class App:
         self.scene = Scene(self)
         self.start = time.time()
         self.end = 0
+        self.render_lock = threading.Lock()
 
     def run(self):
         while not self.done:
+            self.render_lock.acquire()
             # Check Events
             self.anim_trigger = False
             for e in pg.event.get():
@@ -68,6 +71,8 @@ class App:
                 text_image = Image(Texture.from_surface(self.renderer, text))
                 Image(Texture.from_surface(self.renderer, text)).draw(dstrect=(WIDTH-500, 10))
 
+                chat = self.SUAVE.get_recent_chat_messages()
+
             else:
                 if self.end == 0:
                     self.end = time.time()
@@ -89,6 +94,6 @@ class App:
             self.renderer.present()
             self.window.title = str(f"FPS: {self.clock.get_fps()}")
 
-
+            self.render_lock.release()
 
             # todo exception handle these calls gracefully
