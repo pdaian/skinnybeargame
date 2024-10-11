@@ -41,6 +41,8 @@ class Cache:
             }
             attrs = ENTITY_SPRITE_ATTRS[sprite_name]
             images = self.get_layer_array(attrs)
+            if sprite_name == 'pigeon':
+                print(images)
             self.entity_sprite_cache[sprite_name]['all_states'] = {'default': images}
 
             if 'additional_states' in attrs:

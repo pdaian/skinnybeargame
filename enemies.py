@@ -35,7 +35,7 @@ def run_enemy_loop(enemy_spawners, app):
         # spawn enemies if needed
         for enemy_spawner in enemy_spawners:
             if time.time() - enemy_spawner.last_updated > enemy_spawner.spawn_every:
-                print("spawning")
+                print("spawning", enemy_spawner.spawn_name)
                 enemy_spawner.last_updated = time.time()
                 if len(enemy_spawner.enemies_spawned) > 0:
                     if enemy_spawner.enemies_spawned[-1].health > 0:

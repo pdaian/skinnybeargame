@@ -53,9 +53,13 @@ class Scene:
                     self.app.player.offset = pos * TILE_SIZE
                 elif name == 'kitty':
                     Entity(self.app, name=name, pos=pos, collision=False)
-                elif name == 'pigeon':
+                elif 'enemy' in name:
+                    # jank ass bugfix but it works, spawn and delete phantom enity
+                    enemy_name = name.replace('enemy-', '')
+                    phantom_entity = Entity(self.app, name=enemy_name, pos=pos, collision=False)
+                    phantom_entity.kill()
                     spawner = Entity(self.app, name='entityspawner', pos=pos, collision=False)
-                    spawner.spawn_name = 'pigeon'
+                    spawner.spawn_name = enemy_name
                     spawner.spawn_every = 15
                     spawner.insta = True
                     spawner.follow_speed = 20.0
