@@ -58,7 +58,7 @@ ENTITY_SPRITE_ATTRS = {
     },
     'pigeon': {
         'path': 'assets/entities/level1/enemies/pigeon/pigeon.png',
-        'num_layers': 1,
+        'num_layers': 3,
         'scale': 10,
         'y_offset': 50,
         'health': 10,

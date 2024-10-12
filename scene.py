@@ -47,13 +47,15 @@ class Scene:
 
         for j, row in enumerate(MAP):
             for i, name in enumerate(row):
+                if name == -1:
+                    continue
                 pos = vec2(i, j)
                 # + vec2(0.5)
                 if name == 'player':
                     self.app.player.offset = pos * TILE_SIZE
                 elif name == 'kitty':
                     Entity(self.app, name=name, pos=pos, collision=False)
-                elif 'enemy' in name:
+                elif 'enemy' in str(name):
                     # jank ass bugfix but it works, spawn and delete phantom enity
                     enemy_name = name.replace('enemy-', '')
                     phantom_entity = Entity(self.app, name=enemy_name, pos=pos, collision=False)

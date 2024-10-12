@@ -92,8 +92,8 @@ class App:
 
     def run(self):
         while not self.done:
-            self.check_events()
             self.get_time()
             self.update()
             self.draw()
+            self.check_events()
 
