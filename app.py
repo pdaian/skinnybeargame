@@ -9,7 +9,7 @@ class App:
     def __init__(self, cache=None):
         self.done = False
         pg.display.init()
-        self.screen = pg.display.set_mode(RES)
+        self.screen = pg.display.set_mode(RES, pg.HIDDEN, vsync=0)
         self.window = Window("sb and the power of <3", resizable=True)
         self.renderer = Renderer(self.window)
         self.clock = pg.time.Clock()
