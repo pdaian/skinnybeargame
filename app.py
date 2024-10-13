@@ -9,9 +9,10 @@ class App:
     def __init__(self, cache=None):
         self.done = False
         pg.display.init()
-        self.screen = pg.display.set_mode(RES, pg.HIDDEN, vsync=0)
-        self.window = Window("sb and the power of <3", size=RES, resizable=True, borderless=True)
-        self.renderer = Renderer(self.window)
+        if cache is None:
+            self.screen = pg.display.set_mode(RES, pg.HIDDEN, vsync=0)
+            self.window = Window("sb and the power of <3", size=RES, resizable=True, borderless=True)
+            self.renderer = Renderer(self.window)
         self.clock = pg.time.Clock()
         self.time = 0
         self.delta_time = 0.01
@@ -76,7 +77,8 @@ class App:
         for e in pg.event.get():
             if e.type == pg.QUIT or (e.type == pg.KEYDOWN and e.key == pg.K_ESCAPE):
                 self.done = True
-                pg.quit()
+                self.__init__(cache=self.cache)
+                #pg.quit()
                 #sys.exit()
             elif e.type == self.anim_event:
                 self.anim_trigger = True

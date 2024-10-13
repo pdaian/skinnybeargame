@@ -4,7 +4,6 @@ music level hearts shooting at harp/piano in sine wave for caroling
 next
 -----
 
-- single window display, esc restart works
 - health/score/death loop parity, including esc / space controls and on screen elements
 - alpha loading
 - smaller blacktop and gravel textures
