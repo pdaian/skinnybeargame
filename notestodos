@@ -5,6 +5,8 @@ next
 -----
 
 - health/score/death loop parity, including esc / space controls and on screen elements
+- scaling / rendering perfection
+    - determinsitic random rot
 - alpha loading
 - smaller blacktop and gravel textures
 - separate building loading engine?

@@ -97,16 +97,16 @@ STACKED_SPRITE_ATTRS = {
         'y_offset': 0,
         'outline': False,
    },
-   'wellington': {
-        'path': 'assets/entities/level1/town/wellington.png',
-        'num_layers': 35,
-        'mask_layer': 31,
-        'scale': 15,
-        'y_offset': -300,
-        'reverse': True,
-        'outline': False,
+   #'wellington': {
+   #     'path': 'assets/entities/level1/town/wellington.png',
+   #     'num_layers': 35,
+   #     'mask_layer': 31,
+   #     'scale': 15,
+  #      'y_offset': -300,
+   #     'reverse': True,
+    #    'outline': False,
 
-    },
+   # },
     'sphere': {
         'path': 'assets/stacked_sprites/sphere.png',
         'num_layers': 13,

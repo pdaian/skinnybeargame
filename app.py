@@ -4,15 +4,29 @@ from cache import Cache
 from player import Player
 from scene import Scene
 from pygame._sdl2 import Window, Renderer, Image, Texture
+import random
 
 class App:
     def __init__(self, cache=None):
         self.done = False
         pg.display.init()
         if cache is None:
-            self.screen = pg.display.set_mode(RES, pg.HIDDEN, vsync=0)
-            self.window = Window("sb and the power of <3", size=RES, resizable=True, borderless=True)
-            self.renderer = Renderer(self.window)
+            # SDL window setup code from https://github.com/pygame/pygame/issues/3575
+            flags = pg.SCALED
+
+            # create the display in "hidden" mode, because it isn't properly sized yet
+            pg.display.set_mode((640,360), flags | pg.HIDDEN)
+
+            # choose the initial scale factor for the window
+            initial_scale_factor = 3  # <-- adjustable
+            window = Window("sb and the power of <3", size=RES)
+            window.size = (640 * initial_scale_factor, 360 * initial_scale_factor)
+            window.position = pg._sdl2.WINDOWPOS_CENTERED
+            self.window = window
+            self.renderer = Renderer(window)
+            self.generation = 0
+        else:
+            self.generation += 1
         self.clock = pg.time.Clock()
         self.time = 0
         self.delta_time = 0.01
@@ -43,10 +57,11 @@ class App:
         self.main_group.draw(self.renderer)
         font = pg.font.Font("assets/fonts/yarn.ttf", size=100)
         text = font.render("Yarn: %3d%%" % (self.player.health), 1, (222,20,20)) # Arguments are: text, anti-aliasing, color
-       # text_image = Image(Texture.from_surface(self.renderer, text), srcrect=(WIDTH-500, 10))
-        #text_image.draw()
+        text_image = Image(Texture.from_surface(self.renderer, text))
+        text_image.draw((WIDTH-500, WIDTH-500, 10, 10))
         self.renderer.present()
-        self.window.title = str(f"FPS: {self.clock.get_fps()}")
+        if random.random() < .1:
+            self.window.title = str(f"sb and the power of <3 | FPS: {int(self.clock.get_fps())}")
         return # todo clean below reprod health display eol screen
         if self.player.health > 0:
             renderer.draw_color = (107, 142, 35, 255)
@@ -57,7 +72,7 @@ class App:
             self.screen.blit(background_rect, (WIDTH-550, 0))
             font = pg.font.Font("assets/fonts/yarn.ttf", size=100)
             text = font.render("Yarn: %3d%%" % (self.player.health), 1, (222,20,20)) # Arguments are: text, anti-aliasing, color
-            self.screen.blit(text, (WIDTH-500, 10))
+            self.screen.blit(text, (WIDTH-500, WIDTH-500, 10, 10))
             pg.display.flip()
         else:
             #self.done = True

@@ -26,7 +26,7 @@ def run_enemy_loop(enemy_spawners, app):
         for enemy_spawner in enemy_spawners:
             live_enemies = []
             for enemy in enemy_spawner.enemies_spawned:
-                if enemy.health > 0:
+                if enemy.health > 0 and enemy.generation == app.generation:
                     print(enemy.health, enemy.name)
                     live_enemies.append(enemy)
             enemy_spawner.enemies_spawned = live_enemies
@@ -46,6 +46,7 @@ def run_enemy_loop(enemy_spawners, app):
                 enemy.follow_within = enemy_spawner.follow_within
                 enemy.does_damage = enemy_spawner.does_damage
                 enemy.following = False
+                enemy.generation = app.generation
                 print("spawning done", enemy.pos)
                 enemy_spawner.enemies_spawned.append(enemy)
                 enemies.append(enemy)
