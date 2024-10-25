@@ -10,6 +10,7 @@ next
 - alpha loading
 - smaller blacktop and gravel textures
 - separate building loading engine?
+    - genericize loader, assets prepackaged / versioned
 - code cleanup
 - display scaling
 
