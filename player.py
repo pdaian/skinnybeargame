@@ -112,19 +112,3 @@ class Player(BaseEntity):
 
     def move(self):
         self.offset += self.inc
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
