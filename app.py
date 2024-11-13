@@ -18,7 +18,7 @@ class App:
             pg.display.set_mode((640,360), flags | pg.HIDDEN)
 
             # choose the initial scale factor for the window
-            initial_scale_factor = 3  # <-- adjustable
+            initial_scale_factor = 2.5  # <-- adjustable
             window = Window("sb and the power of <3", size=RES)
             window.size = (640 * initial_scale_factor, 360 * initial_scale_factor)
             window.position = pg._sdl2.WINDOWPOS_CENTERED

@@ -1,7 +1,9 @@
 from stacked_sprite import *
+import random
 from random import uniform
 from entity import Entity
 import enemies
+
 
 P = 'player'
 K = 'kitty'  # entity
@@ -42,6 +44,7 @@ class Scene:
         enemies.run_enemy_loop(self.enemy_spawners, app)
 
     def load_scene(self):
+        random.seed(19)
         rand_rot = lambda: uniform(0, 360)
         rand_pos = lambda pos: pos + vec2(uniform(-0.25, 0.25))
 
