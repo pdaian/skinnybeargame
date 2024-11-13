@@ -27,7 +27,7 @@ class StackedSprite(pg.sprite.Sprite):
         self.rot = (rot % 360) // self.viewing_angle
 
         self.rect = self.rotated_sprites[self.angle].get_rect()
-        
+
         # upload all computed surfaces into gpu memory
         # todo optimize this by doing surface computations in-gpu
         for angle in range(len(self.rotated_sprites)):
@@ -103,19 +103,3 @@ class TrnspStackedSprite(StackedSprite):
                 if self.rect.contains(self.player.rect):
                     self.image = self.alpha_objects[self.angle]
                     self.alpha_trigger = False
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

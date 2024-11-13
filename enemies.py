@@ -31,7 +31,6 @@ def run_enemy_loop(enemy_spawners, app):
                     live_enemies.append(enemy)
             enemy_spawner.enemies_spawned = live_enemies
         print("cleanup took", startcleanup  - time.time())
-        
         # spawn enemies if needed
         for enemy_spawner in enemy_spawners:
             if time.time() - enemy_spawner.last_updated > enemy_spawner.spawn_every:
@@ -51,7 +50,6 @@ def run_enemy_loop(enemy_spawners, app):
                 enemy_spawner.enemies_spawned.append(enemy)
                 enemies.append(enemy)
         print("sleeping")
-        
         # update all active enemies to follow player
         for enemy in enemies:
             player_pos = pgm.Vector2(app.player.rect.center)
@@ -68,8 +66,6 @@ def run_enemy_loop(enemy_spawners, app):
                     normalized_vector /= distance_away
                 print("setting velocity to", normalized_vector)
                 enemy.velocity = normalized_vector
-
         # enemy attack loop; shoot attacks at player
-        
         time.sleep(.5)
         print("enemy loop done")

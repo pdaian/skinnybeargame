@@ -172,21 +172,3 @@ STACKED_SPRITE_ATTRS = {
         'health': 50,
     },
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

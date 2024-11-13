@@ -21,21 +21,21 @@ class Player(BaseEntity):
         self.walking = False
         self.animation = ""
         self.health = 100
-        
+
     def start_walking(self):
         self.walking = True
         self.set_animation("walking")
-        
+
     def stop_walking(self):
         self.walking = False
         self.set_animation("default")
-        
+
     def set_animation(self, animation):
         self.animation = animation
         self.images = self.all_states[animation]
         self.frame_index = 0
         self.app.anim_trigger = True
-        
+
     def animate(self):
         super().animate()
         if self.app.anim_trigger:
@@ -43,7 +43,6 @@ class Player(BaseEntity):
                 self.image.flip_x = False
             else:
                 self.image.flip_x = True
-
 
     def control(self):
         self.inc = vec2(0)
@@ -80,7 +79,6 @@ class Player(BaseEntity):
                 self.last_direction_mult[1] = 0
             if self.inc.x and self.inc.y:
                 self.inc *= self.diag_move_corr
-                
             if not self.walking:
                 self.start_walking()
         else:

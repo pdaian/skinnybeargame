@@ -79,4 +79,3 @@ class Bullet(BaseEntity):
     def run(self):
         bullet_direction = self.bullet_direction * self.app.delta_time
         self.pos += bullet_direction.rotate_rad(-self.angle) - self.player.inc
-        

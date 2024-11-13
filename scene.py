@@ -103,16 +103,3 @@ class Scene:
     def update(self):
         self.get_closest_object_to_player()
         self.transform()
-
-
-
-
-
-
-
-
-
-
-
-
-
