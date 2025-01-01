@@ -5,6 +5,7 @@ next
 -----
 
 - health/score/death loop parity, including esc / space controls and on screen elements
+- enemy cleanup bug on restart
 - scaling / rendering perfection
     - determinsitic random rot
 - alpha loading

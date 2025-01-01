@@ -57,7 +57,7 @@ class App:
         self.main_group.draw(self.renderer)
         font = pg.font.Font("assets/fonts/yarn.ttf", size=100)
         text = font.render("Yarn: %3d%%" % (self.player.health), 1, (222,20,20)) # Arguments are: text, anti-aliasing, color
-        text_image = Image(Texture.from_surface(self.renderer, text))
+        text_image = Texture.from_surface(self.renderer, text)
         text_image.draw((WIDTH-500, 0, 10, 0))
         self.renderer.present()
         if random.random() < .1:
@@ -85,7 +85,6 @@ class App:
             text = font.render("SPACE - restart esc - give up", 1, (222,20,20)) # Arguments are: text, anti-aliasing, color
             self.screen.blit(text, (200, H_HEIGHT+100))
             pg.display.flip()
-            
 
     def check_events(self):
         self.anim_trigger = False
@@ -93,13 +92,8 @@ class App:
             if e.type == pg.QUIT or (e.type == pg.KEYDOWN and e.key == pg.K_ESCAPE):
                 self.done = True
                 self.__init__(cache=self.cache)
-                #pg.quit()
-                #sys.exit()
             elif e.type == self.anim_event:
                 self.anim_trigger = True
-            elif e.type == pg.KEYDOWN and (self.player.health < 1 and e.key == pg.K_SPACE):
-                self.__init__(cache=self.cache)
-                self.player.single_fire(event=e)
             elif e.type == pg.KEYDOWN:
                 self.player.single_fire(event=e)
 
