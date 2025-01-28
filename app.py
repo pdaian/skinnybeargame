@@ -52,41 +52,31 @@ class App:
 
     def draw(self):
         # render scene tree
-        self.renderer.clear()
-        self.renderer.draw_color = (107, 142, 35, 255)
-        self.main_group.draw(self.renderer)
-        font = pg.font.Font("assets/fonts/yarn.ttf", size=100)
-        text = font.render("Yarn: %3d%%" % (self.player.health), 1, (222,20,20)) # Arguments are: text, anti-aliasing, color
-        text_image = Texture.from_surface(self.renderer, text)
-        self.renderer.blit(text_image, pg.Rect(0, 0, 400, 400))
-        #text_image.draw(self.renderer, (WIDTH-500, 0, 10, 0))
-#text_image, (WIDTH-500, 0, 10, 0))
-        self.renderer.present()
-        if random.random() < .1:
+        if random.random() < .01:
             self.window.title = str(f"sb and the power of <3 | FPS: {int(self.clock.get_fps())}")
-        return # todo clean below reprod health display eol screen
         if self.player.health > 0:
-            renderer.draw_color = (107, 142, 35, 255)
-            self.main_group.draw(self.screen)
-            background_rect = pg.Surface((550,150))  # the size of your rect
-            background_rect.set_alpha(200)                # alpha level
-            background_rect.fill((64,48,27))           # this fills the entire surface
-            self.screen.blit(background_rect, (WIDTH-550, 0))
+            self.renderer.clear()
+            self.renderer.draw_color = (107, 142, 35, 255)
+            self.main_group.draw(self.renderer)
             font = pg.font.Font("assets/fonts/yarn.ttf", size=100)
             text = font.render("Yarn: %3d%%" % (self.player.health), 1, (222,20,20)) # Arguments are: text, anti-aliasing, color
-            self.screen.blit(text, (WIDTH-500, WIDTH-500, 10, 10))
-            pg.display.flip()
+            text_image = Texture.from_surface(self.renderer, text)
+            self.renderer.blit(text_image, pg.Rect(0, 0, text_image.width, text_image.height))
+            self.renderer.present()
         else:
-            #self.done = True
-            self.screen.fill((64,48,27))
+            self.renderer.clear()
+            self.renderer.draw_color = (64, 48, 27, 255)
             font = pg.font.Font("assets/fonts/yarn.ttf", size=100)
             text = font.render("skinny bear has run out of yarn", 1, (222,20,20)) # Arguments are: text, anti-aliasing, color
-            self.screen.blit(text, (200, H_HEIGHT-300))
+            text_image = Texture.from_surface(self.renderer, text)
+            self.renderer.blit(text_image, pg.Rect(50, H_HEIGHT-300, text_image.width, text_image.height))
             text = font.render("this kills the skinny bear :(", 1, (222,20,20)) # Arguments are: text, anti-aliasing, color
-            self.screen.blit(text, (200, H_HEIGHT-200))
-            text = font.render("SPACE - restart esc - give up", 1, (222,20,20)) # Arguments are: text, anti-aliasing, color
-            self.screen.blit(text, (200, H_HEIGHT+100))
-            pg.display.flip()
+            text_image = Texture.from_surface(self.renderer, text)
+            self.renderer.blit(text_image, pg.Rect(50, H_HEIGHT-200, text_image.width, text_image.height))
+            text = font.render("ESC - restart", 1, (222,20,20)) # Arguments are: text, anti-aliasing, color
+            text_image = Texture.from_surface(self.renderer, text)
+            self.renderer.blit(text_image, pg.Rect(50, H_HEIGHT+100, text_image.width, text_image.height))
+            self.renderer.present()
 
     def check_events(self):
         self.anim_trigger = False
@@ -98,7 +88,6 @@ class App:
                 self.anim_trigger = True
             elif e.type == pg.KEYDOWN:
                 self.player.single_fire(event=e)
-
 
     def get_time(self):
         self.time = pg.time.get_ticks() * 0.001
