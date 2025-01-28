@@ -58,7 +58,9 @@ class App:
         font = pg.font.Font("assets/fonts/yarn.ttf", size=100)
         text = font.render("Yarn: %3d%%" % (self.player.health), 1, (222,20,20)) # Arguments are: text, anti-aliasing, color
         text_image = Texture.from_surface(self.renderer, text)
-        text_image.draw((WIDTH-500, 0, 10, 0))
+        self.renderer.blit(text_image, pg.Rect(0, 0, 400, 400))
+        #text_image.draw(self.renderer, (WIDTH-500, 0, 10, 0))
+#text_image, (WIDTH-500, 0, 10, 0))
         self.renderer.present()
         if random.random() < .1:
             self.window.title = str(f"sb and the power of <3 | FPS: {int(self.clock.get_fps())}")
